@@ -1,0 +1,901 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 40 33% 96%;
+    --foreground: 206 38% 19%;
+    --card: 40 33% 98%;
+    --card-foreground: 206 38% 19%;
+    --popover: 40 33% 98%;
+    --popover-foreground: 206 38% 19%;
+    --primary: 201 37% 25%;
+    --primary-foreground: 40 33% 96%;
+    --secondary: 142 15% 60%;
+    --secondary-foreground: 206 38% 19%;
+    --muted: 201 37% 95%;
+    --muted-foreground: 201 37% 45%;
+    --accent: 11 71% 62%;
+    --accent-foreground: 40 33% 96%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 40 33% 96%;
+    --border: 201 37% 90%;
+    --input: 201 37% 90%;
+    --ring: 201 37% 25%;
+    --radius: 0.75rem;
+  }
+
+  .dark {
+    --background: 206 38% 12%;
+    --foreground: 40 33% 96%;
+    --card: 206 38% 15%;
+    --card-foreground: 40 33% 96%;
+    --popover: 206 38% 15%;
+    --popover-foreground: 40 33% 96%;
+    --primary: 201 37% 65%;
+    --primary-foreground: 206 38% 12%;
+    --secondary: 142 15% 45%;
+    --secondary-foreground: 40 33% 96%;
+    --muted: 206 38% 20%;
+    --muted-foreground: 206 38% 70%;
+    --accent: 11 71% 52%;
+    --accent-foreground: 40 33% 96%;
+    --destructive: 0 84% 40%;
+    --destructive-foreground: 40 33% 96%;
+    --border: 206 38% 25%;
+    --input: 206 38% 25%;
+    --ring: 201 37% 65%;
+  }
+}
+
+@keyframes slide-in-right {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slide-in-left {
+  from {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.animate-slide-in-right {
+  animation: slide-in-right 0.6s ease-out forwards;
+}
+
+.animate-slide-in-left {
+  animation: slide-in-left 0.6s ease-out forwards;
+  animation-delay: 0.3s;
+  opacity: 0;
+}
+
+.transform {
+  will-change: transform;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.5s ease-out forwards;
+}
+
+@keyframes gradient-x {
+  0%, 100% { background-position: 0% 50% }
+  50% { background-position: 100% 50% }
+}
+
+.animate-gradient-x {
+  animation: gradient-x 15s ease infinite;
+  background-size: 200% 200%;
+}
+
+@keyframes typing {
+  from { width: 0 }
+  to { width: 100% }
+}
+
+.animate-typing {
+  overflow: hidden;
+  white-space: nowrap;
+  animation: typing 2s steps(40, end);
+}
+
+@keyframes slide-up {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.animate-slide-up {
+  animation: slide-up 0.5s ease-out forwards;
+}
+
+@keyframes textLoop {
+  0%, 100% { 
+    opacity: 1;
+    transform: translateY(0);
+  }
+  50% { 
+    opacity: 0.8;
+    transform: translateY(-2px);
+  }
+}
+
+.animate-text-loop {
+  animation: textLoop 4s ease-in-out infinite;
+}
+
+@keyframes fadeInOut {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 0.4; }
+}
+
+.animate-fade-loop {
+  animation: fadeInOut 6s ease-in-out infinite;
+}
+
+@keyframes textPulse {
+  0%, 100% { 
+    opacity: 0.9;
+    transform: scale(1);
+  }
+  50% { 
+    opacity: 1;
+    transform: scale(1.02);
+  }
+}
+
+@keyframes addressTyping {
+  0% {
+    width: 0;
+    opacity: 0.7;
+  }
+  50% {
+    width: 100%;
+    opacity: 1;
+  }
+  100% {
+    width: 100%;
+    opacity: 0;
+  }
+}
+
+@keyframes cardFloat {
+  0%, 100% {
+    transform: translateY(0) translateX(0);
+    box-shadow: 0 10px 30px -10px rgba(var(--primary), 0.2);
+  }
+  50% {
+    transform: translateY(-8px) translateX(4px);
+    box-shadow: 0 20px 40px -15px rgba(var(--primary), 0.3);
+  }
+}
+
+@keyframes imageReveal {
+  0% {
+    opacity: 0;
+    transform: scale(1.1);
+  }
+  100% {
+    opacity: 0.3;
+    transform: scale(1);
+  }
+}
+
+.animate-text-pulse {
+  animation: textPulse 3s ease-in-out infinite;
+}
+
+.animate-address-typing {
+  animation: addressTyping 4s ease-in-out infinite;
+  overflow: hidden;
+  white-space: nowrap;
+  display: inline-block;
+}
+
+.animate-card-float {
+  animation: cardFloat 6s ease-in-out infinite;
+}
+
+.animate-image-reveal {
+  animation: imageReveal 1.5s ease-out forwards;
+}
+
+@keyframes imageAnalysisLoop {
+  0% {
+    filter: brightness(1) saturate(1);
+  }
+  25% {
+    filter: brightness(1.05) saturate(1.1);
+  }
+  50% {
+    filter: brightness(1.1) saturate(1.2);
+  }
+  75% {
+    filter: brightness(1.05) saturate(1.1);
+  }
+  100% {
+    filter: brightness(1) saturate(1);
+  }
+}
+
+@keyframes scanLineLoop {
+  0% {
+    transform: translateY(-100%);
+  }
+  100% {
+    transform: translateY(100%);
+  }
+}
+
+.animate-house-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  animation: imageAnalysisLoop 4s ease-in-out infinite;
+}
+
+.animate-house-container img {
+  opacity: 1 !important;
+  object-fit: cover;
+  width: 100%;
+  height: 100%;
+}
+
+.animate-house-container::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, 
+    transparent,
+    hsl(var(--primary)/0.4),
+    hsl(var(--primary)),
+    hsl(var(--primary)/0.4),
+    transparent
+  );
+  filter: blur(3px);
+  animation: scanLineLoop 2s linear infinite;
+  z-index: 2;
+}
+
+@keyframes cardRevealAndFloat {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-card {
+  animation: cardRevealAndFloat 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  box-shadow: 
+    0 0 20px -5px hsl(var(--primary)/0.2),
+    0 8px 16px -6px hsl(var(--primary)/0.1);
+}
+
+@keyframes valueGlow {
+  0%, 100% {
+    opacity: 0.9;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+.animate-value {
+  animation: valueGlow 2s ease-in-out infinite;
+}
+
+@keyframes analysisTyping {
+  0% {
+    width: 0;
+    opacity: 1;
+  }
+  100% {
+    width: 100%;
+    opacity: 1;
+  }
+}
+
+@keyframes scanAnalysis {
+  0% {
+    transform: translateY(-100%);
+    opacity: 0.8;
+  }
+  100% {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+}
+
+@keyframes cardSlideUp {
+  0% {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.animate-analysis {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.animate-analysis img {
+  opacity: 1 !important;
+  object-fit: cover;
+  width: 100%;
+  height: 100%;
+}
+
+.animate-analysis::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, 
+    transparent 0%,
+    transparent 70%,
+    hsl(var(--background)) 100%
+  );
+  z-index: 1;
+}
+
+.animate-analysis::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, 
+    transparent,
+    hsl(var(--primary)/0.6),
+    hsl(var(--primary)),
+    hsl(var(--primary)/0.6),
+    transparent
+  );
+  filter: blur(2px);
+  animation: scanAnalysis 2s linear infinite;
+  z-index: 2;
+}
+
+.animate-typing-text {
+  display: inline-block;
+  overflow: hidden;
+  white-space: nowrap;
+  border-right: 2px solid hsl(var(--primary));
+  animation: analysisTyping 2s steps(40, end) infinite;
+  animation-fill-mode: forwards;
+}
+
+.animate-card {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  animation: cardSlideUp 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  background: linear-gradient(
+    to top,
+    hsl(var(--background)) 0%,
+    hsl(var(--background)/0.9) 100%
+  );
+  backdrop-filter: blur(8px);
+  border-top: 1px solid hsl(var(--border));
+  padding: 1.5rem;
+  z-index: 3;
+}
+
+.animate-value-highlight {
+  animation: valueGlow 2s ease-in-out infinite;
+}
+
+@keyframes valueGlow {
+  0%, 100% {
+    opacity: 0.9;
+    filter: brightness(1);
+  }
+  50% {
+    opacity: 1;
+    filter: brightness(1.2);
+  }
+}
+
+@keyframes demoSequence {
+  0%, 5% {
+    background: hsl(var(--background));
+  }
+  40%, 95% {
+    background: transparent;
+  }
+  96%, 100% {
+    background: hsl(var(--background));
+  }
+}
+
+@keyframes addressTyping {
+  0% {
+    width: 0;
+    opacity: 0;
+  }
+  5% {
+    width: 0;
+    opacity: 1;
+  }
+  25% {
+    width: 100%;
+    opacity: 1;
+  }
+  35% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes analysisOverlay {
+  0%, 25% {
+    opacity: 0;
+  }
+  35% {
+    opacity: 1;
+  }
+  45% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes houseReveal {
+  0%, 35% {
+    opacity: 0;
+    transform: scale(1.05);
+  }
+  45% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  90% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  95% {
+    opacity: 0;
+    transform: scale(1.05);
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes scanLine {
+  0% {
+    transform: translateY(-100%);
+  }
+  100% {
+    transform: translateY(100%);
+  }
+}
+
+@keyframes resultCard {
+  0%, 45% {
+    opacity: 0;
+    transform: translateY(100%);
+  }
+  50% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  90% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  95% {
+    opacity: 0;
+    transform: translateY(100%);
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+.demo-container {
+  position: relative;
+  height: 580px;
+  border-radius: 1.5rem;
+  overflow: hidden;
+  background: hsl(var(--background));
+  animation: demoSequence 8s linear infinite;
+}
+
+.demo-address {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  white-space: nowrap;
+  overflow: hidden;
+  font-size: 1.25rem;
+  color: hsl(var(--primary));
+  border-right: 2px solid hsl(var(--primary));
+  padding-right: 4px;
+  animation: addressTyping 8s linear infinite;
+}
+
+.demo-analysis {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: hsl(var(--background));
+  color: hsl(var(--primary));
+  font-size: 1.25rem;
+  animation: analysisOverlay 8s linear infinite;
+}
+
+.demo-house {
+  position: absolute;
+  inset: 0;
+  animation: houseReveal 8s linear infinite;
+}
+
+.demo-house::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    transparent 70%,
+    hsl(var(--background)/0.8) 100%
+  );
+}
+
+.demo-scan-line {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, 
+    transparent,
+    hsl(var(--primary)/0.4),
+    hsl(var(--primary)),
+    hsl(var(--primary)/0.4),
+    transparent
+  );
+  filter: blur(2px);
+  animation: scanLine 2s linear infinite;
+  opacity: 0.6;
+}
+
+.demo-result {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 2rem;
+  background: linear-gradient(
+    to top,
+    hsl(var(--background)) 0%,
+    hsl(var(--background)/0.95) 100%
+  );
+  backdrop-filter: blur(12px);
+  border-top: 1px solid hsl(var(--border));
+  animation: resultCard 8s linear infinite;
+}
+
+/* Intersection Observer utility */
+.pause-out-of-view {
+  animation-play-state: paused;
+}
+
+/* Add to your existing animations */
+
+.grid-background {
+  background-size: 50px 50px;
+  background-image: 
+    linear-gradient(to right, hsl(var(--primary)/0.1) 1px, transparent 1px),
+    linear-gradient(to bottom, hsl(var(--primary)/0.1) 1px, transparent 1px);
+  animation: gridMove 20s linear infinite;
+}
+
+@keyframes gridMove {
+  0% {
+    transform: translateY(-50px);
+  }
+  100% {
+    transform: translateY(50px);
+  }
+}
+
+@keyframes spin-slow {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes progress {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+.animate-spin-slow {
+  animation: spin-slow 3s linear infinite;
+}
+
+.animate-progress {
+  animation: progress 2s ease-in-out infinite;
+}
+
+/* Update existing animations with smoother transitions */
+.demo-scan-line::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom,
+    transparent,
+    hsl(var(--primary)/0.2) 45%,
+    hsl(var(--primary)/0.4) 50%,
+    hsl(var(--primary)/0.2) 55%,
+    transparent
+  );
+  filter: blur(4px);
+  animation: scanLine 2s linear infinite;
+  opacity: 0.6;
+}
+
+@keyframes scan-line {
+  0% {
+    top: -5%;
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.8;
+  }
+  90% {
+    opacity: 0.8;
+  }
+  100% {
+    top: 105%;
+    opacity: 0;
+  }
+}
+
+.animate-scan-line {
+  animation: scan-line 3s ease-in-out infinite;
+}
+
+@keyframes marker-pulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.8;
+  }
+  50% {
+    transform: scale(1.2);
+    opacity: 0.4;
+  }
+}
+
+.animate-marker-pulse {
+  animation: marker-pulse 2s ease-in-out infinite;
+}
+
+/* Improved typing animation */
+.typing-text {
+  overflow: hidden;
+  white-space: nowrap;
+  border-right: 2px solid transparent;
+  width: 0;
+  animation: 
+    typing 2s steps(40, end) forwards,
+    blink-caret .75s step-end infinite;
+}
+
+@keyframes typing {
+  from { width: 0 }
+  to { width: 100% }
+}
+
+@keyframes blink-caret {
+  from, to { border-color: transparent }
+  50% { border-color: hsl(var(--primary)) }
+}
+
+/* Refined fade-in animations */
+.animate-fade-in {
+  opacity: 0;
+  animation: fadeIn 0.5s ease-out forwards;
+}
+
+.animate-fade-in-delay-1 {
+  opacity: 0;
+  animation: fadeIn 0.5s ease-out 0.7s forwards;
+}
+
+.animate-fade-in-delay-2 {
+  opacity: 0;
+  animation: fadeIn 0.5s ease-out 2.5s forwards;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Update existing animations */
+.demo-analysis {
+  opacity: 0;
+  transform: translateY(10px);
+}
+
+.demo-house {
+  opacity: 0;
+  transform: scale(1.05);
+}
+
+.demo-house.animate-fade-in {
+  animation: houseReveal 0.8s ease-out forwards;
+}
+
+@keyframes houseReveal {
+  from {
+    opacity: 0;
+    transform: scale(1.05);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes blink-caret {
+  from, to { border-color: transparent }
+  50% { border-color: hsl(var(--primary)) }
+}
+
+.animate-blink-caret {
+  animation: blink-caret 0.75s step-end infinite;
+}
+
+/* Sequential fade-in animations */
+.animate-fade-in-delay-1 {
+  opacity: 0;
+  animation: fadeIn 0.5s ease-out 0.1s forwards;
+}
+
+.animate-fade-in-delay-2 {
+  opacity: 0;
+  animation: fadeIn 0.5s ease-out 0.3s forwards;
+}
+
+.animate-fade-in-delay-3 {
+  opacity: 0;
+  animation: fadeIn 0.5s ease-out 0.5s forwards;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Single scan animation */
+@keyframes scanOnce {
+  0% {
+    top: -5%;
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.8;
+  }
+  90% {
+    opacity: 0.8;
+  }
+  100% {
+    top: 105%;
+    opacity: 0;
+  }
+}
+
+.animate-scan-once {
+  animation: scanOnce 2s ease-in-out forwards;
+}
+
+/* Marker reveal animation */
+@keyframes markerReveal {
+  0% {
+    opacity: 0;
+    transform: scale(0.5);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.2);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.animate-marker-reveal {
+  opacity: 0;
+  animation: markerReveal 0.6s ease-out forwards;
+}
+
+/* Add different delays for each marker */
+.delay-\[1000ms\] {
+  animation-delay: 1000ms;
+}
+
+.delay-\[1200ms\] {
+  animation-delay: 1200ms;
+}
+
+.delay-\[1400ms\] {
+  animation-delay: 1400ms;
+}
+
+/* Card reveal animation */
+@keyframes cardReveal {
+  0% {
+    opacity: 0;
+    transform: translateY(-50%) translateX(10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(-50%) translateX(0);
+  }
+}
+
+.animate-card-reveal {
+  animation: cardReveal 0.6s ease-out forwards;
+}
+
+/* Existing animations remain the same */
+

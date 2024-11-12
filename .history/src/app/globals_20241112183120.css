@@ -1,0 +1,609 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 40 33% 96%;
+    --foreground: 206 38% 19%;
+    --card: 40 33% 98%;
+    --card-foreground: 206 38% 19%;
+    --popover: 40 33% 98%;
+    --popover-foreground: 206 38% 19%;
+    --primary: 201 37% 25%;
+    --primary-foreground: 40 33% 96%;
+    --secondary: 142 15% 60%;
+    --secondary-foreground: 206 38% 19%;
+    --muted: 201 37% 95%;
+    --muted-foreground: 201 37% 45%;
+    --accent: 11 71% 62%;
+    --accent-foreground: 40 33% 96%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 40 33% 96%;
+    --border: 201 37% 90%;
+    --input: 201 37% 90%;
+    --ring: 201 37% 25%;
+    --radius: 0.75rem;
+  }
+
+  .dark {
+    --background: 206 38% 12%;
+    --foreground: 40 33% 96%;
+    --card: 206 38% 15%;
+    --card-foreground: 40 33% 96%;
+    --popover: 206 38% 15%;
+    --popover-foreground: 40 33% 96%;
+    --primary: 201 37% 65%;
+    --primary-foreground: 206 38% 12%;
+    --secondary: 142 15% 45%;
+    --secondary-foreground: 40 33% 96%;
+    --muted: 206 38% 20%;
+    --muted-foreground: 206 38% 70%;
+    --accent: 11 71% 52%;
+    --accent-foreground: 40 33% 96%;
+    --destructive: 0 84% 40%;
+    --destructive-foreground: 40 33% 96%;
+    --border: 206 38% 25%;
+    --input: 206 38% 25%;
+    --ring: 201 37% 65%;
+  }
+}
+
+@keyframes slide-in-right {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slide-in-left {
+  from {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.animate-slide-in-right {
+  animation: slide-in-right 0.6s ease-out forwards;
+}
+
+.animate-slide-in-left {
+  animation: slide-in-left 0.6s ease-out forwards;
+  animation-delay: 0.3s;
+  opacity: 0;
+}
+
+.transform {
+  will-change: transform;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.5s ease-out forwards;
+}
+
+@keyframes gradient-x {
+  0%, 100% { background-position: 0% 50% }
+  50% { background-position: 100% 50% }
+}
+
+.animate-gradient-x {
+  animation: gradient-x 15s ease infinite;
+  background-size: 200% 200%;
+}
+
+@keyframes typing {
+  from { width: 0 }
+  to { width: 100% }
+}
+
+.animate-typing {
+  overflow: hidden;
+  white-space: nowrap;
+  animation: typing 2s steps(40, end);
+}
+
+@keyframes slide-up {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.animate-slide-up {
+  animation: slide-up 0.5s ease-out forwards;
+}
+
+@keyframes textLoop {
+  0%, 100% { 
+    opacity: 1;
+    transform: translateY(0);
+  }
+  50% { 
+    opacity: 0.8;
+    transform: translateY(-2px);
+  }
+}
+
+.animate-text-loop {
+  animation: textLoop 4s ease-in-out infinite;
+}
+
+@keyframes fadeInOut {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 0.4; }
+}
+
+.animate-fade-loop {
+  animation: fadeInOut 6s ease-in-out infinite;
+}
+
+@keyframes textPulse {
+  0%, 100% { 
+    opacity: 0.9;
+    transform: scale(1);
+  }
+  50% { 
+    opacity: 1;
+    transform: scale(1.02);
+  }
+}
+
+@keyframes addressTyping {
+  0% {
+    width: 0;
+    opacity: 0.7;
+  }
+  50% {
+    width: 100%;
+    opacity: 1;
+  }
+  100% {
+    width: 100%;
+    opacity: 0;
+  }
+}
+
+@keyframes cardFloat {
+  0%, 100% {
+    transform: translateY(0) translateX(0);
+    box-shadow: 0 10px 30px -10px rgba(var(--primary), 0.2);
+  }
+  50% {
+    transform: translateY(-8px) translateX(4px);
+    box-shadow: 0 20px 40px -15px rgba(var(--primary), 0.3);
+  }
+}
+
+@keyframes imageReveal {
+  0% {
+    opacity: 0;
+    transform: scale(1.1);
+  }
+  100% {
+    opacity: 0.3;
+    transform: scale(1);
+  }
+}
+
+.animate-text-pulse {
+  animation: textPulse 3s ease-in-out infinite;
+}
+
+.animate-address-typing {
+  animation: addressTyping 4s ease-in-out infinite;
+  overflow: hidden;
+  white-space: nowrap;
+  display: inline-block;
+}
+
+.animate-card-float {
+  animation: cardFloat 6s ease-in-out infinite;
+}
+
+.animate-image-reveal {
+  animation: imageReveal 1.5s ease-out forwards;
+}
+
+@keyframes imageAnalysisLoop {
+  0% {
+    filter: brightness(1) saturate(1);
+  }
+  25% {
+    filter: brightness(1.05) saturate(1.1);
+  }
+  50% {
+    filter: brightness(1.1) saturate(1.2);
+  }
+  75% {
+    filter: brightness(1.05) saturate(1.1);
+  }
+  100% {
+    filter: brightness(1) saturate(1);
+  }
+}
+
+@keyframes scanLineLoop {
+  0% {
+    transform: translateY(-100%);
+  }
+  100% {
+    transform: translateY(100%);
+  }
+}
+
+.animate-house-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  animation: imageAnalysisLoop 4s ease-in-out infinite;
+}
+
+.animate-house-container img {
+  opacity: 1 !important;
+  object-fit: cover;
+  width: 100%;
+  height: 100%;
+}
+
+.animate-house-container::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, 
+    transparent,
+    hsl(var(--primary)/0.4),
+    hsl(var(--primary)),
+    hsl(var(--primary)/0.4),
+    transparent
+  );
+  filter: blur(3px);
+  animation: scanLineLoop 2s linear infinite;
+  z-index: 2;
+}
+
+@keyframes cardRevealAndFloat {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-card {
+  animation: cardRevealAndFloat 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  box-shadow: 
+    0 0 20px -5px hsl(var(--primary)/0.2),
+    0 8px 16px -6px hsl(var(--primary)/0.1);
+}
+
+@keyframes valueGlow {
+  0%, 100% {
+    opacity: 0.9;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+.animate-value {
+  animation: valueGlow 2s ease-in-out infinite;
+}
+
+@keyframes analysisTyping {
+  0% {
+    width: 0;
+    opacity: 1;
+  }
+  100% {
+    width: 100%;
+    opacity: 1;
+  }
+}
+
+@keyframes scanAnalysis {
+  0% {
+    transform: translateY(-100%);
+    opacity: 0.8;
+  }
+  100% {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+}
+
+@keyframes cardSlideUp {
+  0% {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.animate-analysis {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.animate-analysis img {
+  opacity: 1 !important;
+  object-fit: cover;
+  width: 100%;
+  height: 100%;
+}
+
+.animate-analysis::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, 
+    transparent 0%,
+    transparent 70%,
+    hsl(var(--background)) 100%
+  );
+  z-index: 1;
+}
+
+.animate-analysis::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, 
+    transparent,
+    hsl(var(--primary)/0.6),
+    hsl(var(--primary)),
+    hsl(var(--primary)/0.6),
+    transparent
+  );
+  filter: blur(2px);
+  animation: scanAnalysis 2s linear infinite;
+  z-index: 2;
+}
+
+.animate-typing-text {
+  display: inline-block;
+  overflow: hidden;
+  white-space: nowrap;
+  border-right: 2px solid hsl(var(--primary));
+  animation: analysisTyping 2s steps(40, end) infinite;
+  animation-fill-mode: forwards;
+}
+
+.animate-card {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  animation: cardSlideUp 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  background: linear-gradient(
+    to top,
+    hsl(var(--background)) 0%,
+    hsl(var(--background)/0.9) 100%
+  );
+  backdrop-filter: blur(8px);
+  border-top: 1px solid hsl(var(--border));
+  padding: 1.5rem;
+  z-index: 3;
+}
+
+.animate-value-highlight {
+  animation: valueGlow 2s ease-in-out infinite;
+}
+
+@keyframes valueGlow {
+  0%, 100% {
+    opacity: 0.9;
+    filter: brightness(1);
+  }
+  50% {
+    opacity: 1;
+    filter: brightness(1.2);
+  }
+}
+
+@keyframes demoSequence {
+  0%, 5% {
+    background: hsl(var(--background));
+  }
+  40%, 95% {
+    background: transparent;
+  }
+  96%, 100% {
+    background: hsl(var(--background));
+  }
+}
+
+@keyframes addressTyping {
+  0%, 5% {
+    width: 0;
+    border-right: 2px solid hsl(var(--primary));
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+    width: 0;
+  }
+  30%, 35% {
+    width: 100%;
+    opacity: 1;
+    border-right: 2px solid hsl(var(--primary));
+  }
+  40%, 100% {
+    opacity: 0;
+    border-right: transparent;
+  }
+}
+
+@keyframes analysisText {
+  0%, 35% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  40%, 45% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  50%, 100% {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+}
+
+@keyframes houseReveal {
+  0%, 45% {
+    opacity: 0;
+    transform: scale(1.05);
+  }
+  50%, 90% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  95%, 100% {
+    opacity: 0;
+    transform: scale(1.05);
+  }
+}
+
+@keyframes resultCard {
+  0%, 55% {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  60%, 90% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  95%, 100% {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+}
+
+.demo-container {
+  position: relative;
+  height: 580px;
+  border-radius: 1.5rem;
+  overflow: hidden;
+  animation: demoSequence 8s linear infinite;
+  z-index: 10;
+}
+
+.demo-address {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  white-space: nowrap;
+  overflow: hidden;
+  font-size: 1.25rem;
+  color: hsl(var(--primary));
+  padding: 1rem;
+  background: hsl(var(--background)/0.9);
+  border-radius: 0.5rem;
+  z-index: 20;
+  animation: addressTyping 8s linear infinite;
+}
+
+.demo-analysis {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.25rem;
+  color: hsl(var(--primary));
+  background: hsl(var(--background)/0.9);
+  z-index: 15;
+  animation: analysisText 8s linear infinite;
+}
+
+.demo-house {
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+  animation: houseReveal 8s linear infinite;
+}
+
+.demo-scan-line {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 25;
+}
+
+.demo-scan-line::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, 
+    transparent,
+    hsl(var(--primary)/0.4),
+    hsl(var(--primary)),
+    hsl(var(--primary)/0.4),
+    transparent
+  );
+  filter: blur(2px);
+  animation: scanLine 2s linear infinite;
+  opacity: 0.6;
+}
+
+@keyframes scanLine {
+  0% {
+    transform: translateY(-100%);
+  }
+  100% {
+    transform: translateY(100%);
+  }
+}
+
+.demo-result {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 2rem;
+  background: linear-gradient(
+    to top,
+    hsl(var(--background)) 0%,
+    hsl(var(--background)/0.95) 100%
+  );
+  backdrop-filter: blur(12px);
+  border-top: 1px solid hsl(var(--border));
+  z-index: 30;
+  animation: resultCard 8s linear infinite;
+}
+
+/* Intersection Observer utility */
+.pause-out-of-view {
+  animation-play-state: paused;
+}
+

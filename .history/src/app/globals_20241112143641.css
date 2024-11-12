@@ -1,0 +1,222 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 40 33% 96%;
+    --foreground: 206 38% 19%;
+    --card: 40 33% 98%;
+    --card-foreground: 206 38% 19%;
+    --popover: 40 33% 98%;
+    --popover-foreground: 206 38% 19%;
+    --primary: 201 37% 25%;
+    --primary-foreground: 40 33% 96%;
+    --secondary: 142 15% 60%;
+    --secondary-foreground: 206 38% 19%;
+    --muted: 201 37% 95%;
+    --muted-foreground: 201 37% 45%;
+    --accent: 11 71% 62%;
+    --accent-foreground: 40 33% 96%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 40 33% 96%;
+    --border: 201 37% 90%;
+    --input: 201 37% 90%;
+    --ring: 201 37% 25%;
+    --radius: 0.75rem;
+  }
+
+  .dark {
+    --background: 206 38% 12%;
+    --foreground: 40 33% 96%;
+    --card: 206 38% 15%;
+    --card-foreground: 40 33% 96%;
+    --popover: 206 38% 15%;
+    --popover-foreground: 40 33% 96%;
+    --primary: 201 37% 65%;
+    --primary-foreground: 206 38% 12%;
+    --secondary: 142 15% 45%;
+    --secondary-foreground: 40 33% 96%;
+    --muted: 206 38% 20%;
+    --muted-foreground: 206 38% 70%;
+    --accent: 11 71% 52%;
+    --accent-foreground: 40 33% 96%;
+    --destructive: 0 84% 40%;
+    --destructive-foreground: 40 33% 96%;
+    --border: 206 38% 25%;
+    --input: 206 38% 25%;
+    --ring: 201 37% 65%;
+  }
+}
+
+@keyframes slide-in-right {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slide-in-left {
+  from {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.animate-slide-in-right {
+  animation: slide-in-right 0.6s ease-out forwards;
+}
+
+.animate-slide-in-left {
+  animation: slide-in-left 0.6s ease-out forwards;
+  animation-delay: 0.3s;
+  opacity: 0;
+}
+
+.transform {
+  will-change: transform;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.5s ease-out forwards;
+}
+
+@keyframes gradient-x {
+  0%, 100% { background-position: 0% 50% }
+  50% { background-position: 100% 50% }
+}
+
+.animate-gradient-x {
+  animation: gradient-x 15s ease infinite;
+  background-size: 200% 200%;
+}
+
+@keyframes typing {
+  from { width: 0 }
+  to { width: 100% }
+}
+
+.animate-typing {
+  overflow: hidden;
+  white-space: nowrap;
+  animation: typing 2s steps(40, end);
+}
+
+@keyframes slide-up {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.animate-slide-up {
+  animation: slide-up 0.5s ease-out forwards;
+}
+
+@keyframes textLoop {
+  0%, 100% { 
+    opacity: 1;
+    transform: translateY(0);
+  }
+  50% { 
+    opacity: 0.8;
+    transform: translateY(-2px);
+  }
+}
+
+.animate-text-loop {
+  animation: textLoop 4s ease-in-out infinite;
+}
+
+@keyframes fadeInOut {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 0.4; }
+}
+
+.animate-fade-loop {
+  animation: fadeInOut 6s ease-in-out infinite;
+}
+
+@keyframes textPulse {
+  0%, 100% { 
+    opacity: 0.9;
+    transform: scale(1);
+  }
+  50% { 
+    opacity: 1;
+    transform: scale(1.02);
+  }
+}
+
+@keyframes addressTyping {
+  0% {
+    width: 0;
+    opacity: 0.7;
+  }
+  50% {
+    width: 100%;
+    opacity: 1;
+  }
+  100% {
+    width: 100%;
+    opacity: 0;
+  }
+}
+
+@keyframes cardFloat {
+  0%, 100% {
+    transform: translateY(0) translateX(0);
+    box-shadow: 0 10px 30px -10px rgba(var(--primary), 0.2);
+  }
+  50% {
+    transform: translateY(-8px) translateX(4px);
+    box-shadow: 0 20px 40px -15px rgba(var(--primary), 0.3);
+  }
+}
+
+@keyframes imageReveal {
+  0% {
+    opacity: 0;
+    transform: scale(1.1);
+  }
+  100% {
+    opacity: 0.3;
+    transform: scale(1);
+  }
+}
+
+.animate-text-pulse {
+  animation: textPulse 3s ease-in-out infinite;
+}
+
+.animate-address-typing {
+  animation: addressTyping 4s ease-in-out infinite;
+  overflow: hidden;
+  white-space: nowrap;
+  display: inline-block;
+}
+
+.animate-card-float {
+  animation: cardFloat 6s ease-in-out infinite;
+}
+
+.animate-image-reveal {
+  animation: imageReveal 1.5s ease-out forwards;
+}

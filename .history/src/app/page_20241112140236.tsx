@@ -1,0 +1,19 @@
+import { Hero } from "@/components/ui/landing-page/hero";
+// import { Integrations } from "@/components/ui/landing-page/integrations"; // Component doesn't exist yet
+import { ProblemSolution } from "@/components/ui/landing-page/problem-solution";
+import { Features } from "@/components/ui/landing-page/features";
+import { Pricing } from "@/components/ui/landing-page/pricing";
+import { Footer } from "@/components/ui/landing-page/footer";
+
+export default function Home() {
+  return (
+    <div className="min-h-screen bg-background">
+      <Hero />
+      <Integrations />
+      <ProblemSolution />
+      <Features />
+      <Pricing />
+      <Footer />
+    </div>
+  );
+}
