@@ -1,1 +1,0 @@
-export { HousingReport as default } from "./housing-report"; 

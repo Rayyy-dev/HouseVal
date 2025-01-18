@@ -3,9 +3,9 @@
 import React from 'react';
 import { motion, AnimatePresence } from "framer-motion";
 import { Search, Bath, MapPin, Home, ArrowRight, X } from "lucide-react";
-import { Input } from "../../../components/ui/input";
-import { Button } from "../../../components/ui/button";
-import { Label } from "../../../components/ui/label";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
 
 interface Report {
   estimatedPrice: number;
@@ -21,7 +21,7 @@ interface Report {
   }>;
 }
 
-function HousingReport() {
+export function HousingReport() {
   const [isLoading, setIsLoading] = React.useState(false);
   const [location, setLocation] = React.useState("");
   const [bathrooms, setBathrooms] = React.useState("");
@@ -124,15 +124,15 @@ function HousingReport() {
             className="inline-block mb-6"
           >
             <span className="px-5 py-2 rounded-full bg-primary/8 text-primary text-sm font-medium border border-primary/10">
-              AI Price Predictor
+              US Housing AI Predictor
             </span>
           </motion.div>
           <h2 className="text-4xl md:text-5xl font-bold mb-6 tracking-tight">
-            <span className="bg-gradient-to-r from-primary/90 via-primary to-primary/90 bg-clip-text text-transparent">AI House Price</span>
+            <span className="bg-gradient-to-r from-primary/90 via-primary to-primary/90 bg-clip-text text-transparent">US House Price</span>
             <span className="text-foreground"> Predictor</span>
           </h2>
           <p className="text-lg text-muted-foreground/90 max-w-2xl mx-auto leading-relaxed">
-            Get an instant AI-powered estimate for your property's market value
+            Get an instant AI-powered estimate for your US property's market value
           </p>
         </motion.div>
 
@@ -153,44 +153,14 @@ function HousingReport() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {/* Location Input */}
                 <div className="space-y-2">
-                  <Label className="text-sm font-medium text-foreground/90">Location</Label>
+                  <Label className="text-sm font-medium text-foreground/90">US City</Label>
                   <div className="relative">
                     <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                     <Input
                       type="text"
-                      placeholder="Search location..."
+                      placeholder="Enter US city..."
                       value={location}
                       onChange={(e) => setLocation(e.target.value)}
-                      className="pl-9 bg-background/50 border-border/40 hover:border-primary/30 focus:border-primary/50 transition-colors"
-                    />
-                  </div>
-                </div>
-
-                {/* Bathrooms Input */}
-                <div className="space-y-2">
-                  <Label className="text-sm font-medium text-foreground/90">Bathrooms</Label>
-                  <div className="relative">
-                    <Bath className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                    <Input
-                      type="number"
-                      placeholder="e.g., 2"
-                      value={bathrooms}
-                      onChange={(e) => setBathrooms(e.target.value)}
-                      className="pl-9 bg-background/50 border-border/40 hover:border-primary/30 focus:border-primary/50 transition-colors"
-                    />
-                  </div>
-                </div>
-
-                {/* Distance Input */}
-                <div className="space-y-2">
-                  <Label className="text-sm font-medium text-foreground/90">Distance to Center (miles)</Label>
-                  <div className="relative">
-                    <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                    <Input
-                      type="number"
-                      placeholder="e.g., 5"
-                      value={distance}
-                      onChange={(e) => setDistance(e.target.value)}
                       className="pl-9 bg-background/50 border-border/40 hover:border-primary/30 focus:border-primary/50 transition-colors"
                     />
                   </div>
@@ -206,6 +176,36 @@ function HousingReport() {
                       placeholder="e.g., 1500"
                       value={space}
                       onChange={(e) => setSpace(e.target.value)}
+                      className="pl-9 bg-background/50 border-border/40 hover:border-primary/30 focus:border-primary/50 transition-colors"
+                    />
+                  </div>
+                </div>
+
+                {/* Distance Input */}
+                <div className="space-y-2">
+                  <Label className="text-sm font-medium text-foreground/90">Distance to City Center (miles)</Label>
+                  <div className="relative">
+                    <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                    <Input
+                      type="number"
+                      placeholder="e.g., 5"
+                      value={distance}
+                      onChange={(e) => setDistance(e.target.value)}
+                      className="pl-9 bg-background/50 border-border/40 hover:border-primary/30 focus:border-primary/50 transition-colors"
+                    />
+                  </div>
+                </div>
+
+                {/* Bathrooms Input */}
+                <div className="space-y-2">
+                  <Label className="text-sm font-medium text-foreground/90">Bathrooms</Label>
+                  <div className="relative">
+                    <Bath className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                    <Input
+                      type="number"
+                      placeholder="e.g., 2"
+                      value={bathrooms}
+                      onChange={(e) => setBathrooms(e.target.value)}
                       className="pl-9 bg-background/50 border-border/40 hover:border-primary/30 focus:border-primary/50 transition-colors"
                     />
                   </div>
@@ -333,6 +333,4 @@ function HousingReport() {
       </div>
     </section>
   );
-}
-
-export default HousingReport; 
+} 
