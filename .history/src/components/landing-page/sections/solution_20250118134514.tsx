@@ -147,95 +147,44 @@ export function Solution() {
           transition={{ duration: 0.7 }}
           className="mt-24"
         >
-          <Card className="relative group overflow-hidden rounded-[2.5rem]">
-            {/* Modern gradient background */}
-            <div className="absolute inset-0">
-              <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-background to-destructive/10" />
-              <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(var(--primary),0.1),transparent_50%),radial-gradient(circle_at_bottom_left,rgba(var(--destructive),0.1),transparent_50%)]" />
-            </div>
-            
-            <div className="relative backdrop-blur-xl rounded-[2.5rem] border border-primary/10">              
-              <div className="relative p-12 md:p-16">
-                <div className="flex flex-col lg:flex-row items-center gap-12 max-w-6xl mx-auto">
-                  {/* Left Content */}
-                  <div className="flex-1 text-left space-y-8">
-                    <motion.div
-                      initial={{ opacity: 0, y: 10 }}
-                      whileInView={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.5 }}
-                    >
-                      <span className="px-4 py-1.5 rounded-full bg-primary/10 text-primary text-sm font-medium border border-primary/20 shadow-[0_0_15px_-3px_rgba(var(--primary),0.3)]">
-                        Premium AI Valuation
-                      </span>
-                    </motion.div>
-                    
-                    <motion.h3 
-                      initial={{ opacity: 0, y: 10 }}
-                      whileInView={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.5, delay: 0.1 }}
-                      className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-primary via-primary/90 to-primary bg-clip-text text-transparent drop-shadow-[0_0_15px_rgba(var(--primary),0.3)]"
-                    >
-                      Experience Next-Gen Property Valuation
-                    </motion.h3>
-                    
-                    <motion.p 
-                      initial={{ opacity: 0, y: 10 }}
-                      whileInView={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.5, delay: 0.2 }}
-                      className="text-lg text-muted-foreground/90 max-w-xl drop-shadow-[0_0_10px_rgba(var(--primary),0.1)]"
-                    >
-                      Join the future of real estate with our AI-powered valuation system, delivering unmatched accuracy and real-time market intelligence.
-                    </motion.p>
-                  </div>
-                  
-                  {/* Right Stats Grid */}
-                  <motion.div 
-                    initial={{ opacity: 0, scale: 0.95 }}
-                    whileInView={{ opacity: 1, scale: 1 }}
-                    transition={{ duration: 0.5, delay: 0.3 }}
-                    className="flex-1 grid grid-cols-2 gap-4 w-full"
+          <Card className="relative group overflow-hidden">
+            <div className="absolute -inset-0.5 bg-gradient-to-br from-zinc-400/30 via-zinc-100/10 to-zinc-400/30 rounded-2xl blur opacity-50" />
+            <div className="relative bg-black/5 backdrop-blur-sm rounded-xl p-12 border border-zinc-200/10">
+              <div className="absolute right-0 top-0 -z-10 h-[350px] w-[350px] rounded-full bg-zinc-500/5 blur-[100px]" />
+              <div className="absolute left-1/2 bottom-0 -z-10 h-[250px] w-[250px] rounded-full bg-zinc-400/10 blur-[100px]" />
+              
+              <div className="flex flex-col md:flex-row items-center justify-between gap-8">
+                <div className="flex-1 text-left">
+                  <motion.h3 
+                    initial={{ opacity: 0, y: 10 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5 }}
+                    className="text-3xl md:text-4xl font-bold mb-4 bg-gradient-to-r from-zinc-200 via-zinc-400 to-zinc-300 bg-clip-text text-transparent"
                   >
-                    {[
-                      {
-                        stat: "99%",
-                        label: "Accuracy Rate",
-                        gradient: "from-primary/20 to-primary/5"
-                      },
-                      {
-                        stat: "50K+",
-                        label: "Properties Valued",
-                        gradient: "from-destructive/20 to-destructive/5"
-                      },
-                      {
-                        stat: "24/7",
-                        label: "Real-time Updates",
-                        gradient: "from-primary/20 to-primary/5"
-                      },
-                      {
-                        stat: "1M+",
-                        label: "Data Points",
-                        gradient: "from-destructive/20 to-destructive/5"
-                      }
-                    ].map((item, i) => (
-                      <div 
-                        key={i} 
-                        className={cn(
-                          "flex flex-col justify-center p-6 rounded-2xl border border-primary/10",
-                          "bg-gradient-to-br backdrop-blur-sm",
-                          item.gradient,
-                          "shadow-[0_0_15px_-3px_rgba(var(--primary),0.2)]"
-                        )}
-                      >
-                        <span className="text-3xl font-bold text-foreground mb-1 drop-shadow-[0_0_10px_rgba(var(--primary),0.2)]">
-                          {item.stat}
-                        </span>
-                        <span className="text-muted-foreground/80 drop-shadow-[0_0_8px_rgba(var(--primary),0.1)]">
-                          {item.label}
-                        </span>
-                      </div>
-                    ))}
-                  </motion.div>
+                    Ready to Experience the Future of Property Valuation?
+                  </motion.h3>
+                  <motion.p 
+                    initial={{ opacity: 0, y: 10 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5, delay: 0.1 }}
+                    className="text-lg text-zinc-400 max-w-xl"
+                  >
+                    Join thousands of satisfied users who trust HouseVal for accurate, instant property valuations powered by cutting-edge AI technology.
+                  </motion.p>
                 </div>
+                <motion.div 
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  whileInView={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.5, delay: 0.2 }}
+                  className="flex items-center justify-center"
+                >
+                  <div className="relative">
+                    <div className="absolute inset-0 bg-gradient-to-br from-zinc-400/20 to-zinc-300/10 rounded-full blur-2xl" />
+                    <div className="relative bg-zinc-900/90 backdrop-blur-sm rounded-full p-6 border border-zinc-700">
+                      <div className="h-16 w-16 rounded-full bg-gradient-to-br from-zinc-400 to-zinc-600" />
+                    </div>
+                  </div>
+                </motion.div>
               </div>
             </div>
           </Card>

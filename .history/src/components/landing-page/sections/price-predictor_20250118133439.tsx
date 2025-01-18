@@ -133,6 +133,12 @@ export function PricePredictor() {
     }
   };
 
+  // Calculate distance to city center based on location
+  const calculateDistanceToCenter = (location: typeof locations[number]) => {
+    // This is a simplified calculation - in real app would use actual coordinates
+    return Math.round(5 + (Math.random() * 10)); // Random distance between 5-15 miles
+  };
+
   return (
     <section className="relative py-24 overflow-hidden bg-muted/30">
       {/* Background Effects */}

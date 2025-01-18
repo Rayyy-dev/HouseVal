@@ -147,14 +147,14 @@ export function Solution() {
           transition={{ duration: 0.7 }}
           className="mt-24"
         >
-          <Card className="relative group overflow-hidden rounded-[2.5rem]">
+          <Card className="relative group overflow-hidden">
             {/* Modern gradient background */}
             <div className="absolute inset-0">
               <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-background to-destructive/10" />
               <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(var(--primary),0.1),transparent_50%),radial-gradient(circle_at_bottom_left,rgba(var(--destructive),0.1),transparent_50%)]" />
             </div>
             
-            <div className="relative backdrop-blur-xl rounded-[2.5rem] border border-primary/10">              
+            <div className="relative backdrop-blur-xl rounded-xl border border-primary/10">              
               <div className="relative p-12 md:p-16">
                 <div className="flex flex-col lg:flex-row items-center gap-12 max-w-6xl mx-auto">
                   {/* Left Content */}
@@ -164,7 +164,7 @@ export function Solution() {
                       whileInView={{ opacity: 1, y: 0 }}
                       transition={{ duration: 0.5 }}
                     >
-                      <span className="px-4 py-1.5 rounded-full bg-primary/10 text-primary text-sm font-medium border border-primary/20 shadow-[0_0_15px_-3px_rgba(var(--primary),0.3)]">
+                      <span className="px-4 py-1.5 rounded-full bg-primary/10 text-primary text-sm font-medium border border-primary/20">
                         Premium AI Valuation
                       </span>
                     </motion.div>
@@ -173,7 +173,7 @@ export function Solution() {
                       initial={{ opacity: 0, y: 10 }}
                       whileInView={{ opacity: 1, y: 0 }}
                       transition={{ duration: 0.5, delay: 0.1 }}
-                      className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-primary via-primary/90 to-primary bg-clip-text text-transparent drop-shadow-[0_0_15px_rgba(var(--primary),0.3)]"
+                      className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-primary via-primary/90 to-primary bg-clip-text text-transparent"
                     >
                       Experience Next-Gen Property Valuation
                     </motion.h3>
@@ -182,7 +182,7 @@ export function Solution() {
                       initial={{ opacity: 0, y: 10 }}
                       whileInView={{ opacity: 1, y: 0 }}
                       transition={{ duration: 0.5, delay: 0.2 }}
-                      className="text-lg text-muted-foreground/90 max-w-xl drop-shadow-[0_0_10px_rgba(var(--primary),0.1)]"
+                      className="text-lg text-muted-foreground/90 max-w-xl"
                     >
                       Join the future of real estate with our AI-powered valuation system, delivering unmatched accuracy and real-time market intelligence.
                     </motion.p>
@@ -222,16 +222,11 @@ export function Solution() {
                         className={cn(
                           "flex flex-col justify-center p-6 rounded-2xl border border-primary/10",
                           "bg-gradient-to-br backdrop-blur-sm",
-                          item.gradient,
-                          "shadow-[0_0_15px_-3px_rgba(var(--primary),0.2)]"
+                          item.gradient
                         )}
                       >
-                        <span className="text-3xl font-bold text-foreground mb-1 drop-shadow-[0_0_10px_rgba(var(--primary),0.2)]">
-                          {item.stat}
-                        </span>
-                        <span className="text-muted-foreground/80 drop-shadow-[0_0_8px_rgba(var(--primary),0.1)]">
-                          {item.label}
-                        </span>
+                        <span className="text-3xl font-bold text-foreground mb-1">{item.stat}</span>
+                        <span className="text-muted-foreground/80">{item.label}</span>
                       </div>
                     ))}
                   </motion.div>
