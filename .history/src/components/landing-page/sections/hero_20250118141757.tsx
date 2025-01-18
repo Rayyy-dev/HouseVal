@@ -96,14 +96,14 @@ export function Hero() {
             <h1 className="text-5xl sm:text-6xl font-bold leading-[1.1] tracking-tight">
               <span className="inline-block">
                 <span className="relative inline-flex items-center">
-                  <span className="relative z-10 text-foreground">
+                  <span className="relative z-10 bg-gradient-to-r from-primary/90 via-primary to-primary/90 bg-clip-text text-transparent">
                     Predict House Prices
                   </span>
                   <div className="absolute inset-x-0 -bottom-2 h-3 bg-primary/10 blur-xl" />
                 </span>
               </span>
               <br />
-              <span className="text-4xl sm:text-5xl text-primary mt-6 block font-extrabold">
+              <span className="text-4xl sm:text-5xl bg-gradient-to-r from-foreground via-foreground/90 to-foreground bg-clip-text text-transparent mt-6 block">
                 with AI Precision
               </span>
             </h1>
