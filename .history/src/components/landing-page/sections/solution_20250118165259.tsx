@@ -33,7 +33,21 @@ const itemVariants = {
 
 export function Solution() {
   return (
-    <section className="py-32 relative bg-white">
+    <section className="py-32 relative overflow-hidden">
+      {/* Sophisticated Background */}
+      <div className="absolute inset-0">
+        <div className="absolute inset-0 bg-gradient-to-br from-secondary/5 via-transparent to-primary/5" />
+        <motion.div 
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 1.5 }}
+          className="absolute inset-0"
+        >
+          <div className="absolute left-0 right-0 top-0 -z-10 m-auto h-[310px] w-[310px] rounded-full bg-primary/5 blur-[120px] animate-pulse-slow" />
+          <div className="absolute left-1/3 right-0 top-1/2 -z-10 h-[250px] w-[250px] rounded-full bg-secondary/5 blur-[120px] animate-pulse-slow delay-300" />
+        </motion.div>
+      </div>
+
       <div className="container mx-auto px-4 relative">
         {/* Enhanced Header */}
         <motion.div 
@@ -78,8 +92,9 @@ export function Solution() {
             viewport={{ once: true }}
             transition={{ duration: 0.7 }}
           >
-            <Card className="relative group h-full bg-white">
-              <div className="relative h-full rounded-xl p-8 border border-secondary/20">
+            <Card className="relative group h-full">
+              <div className="absolute -inset-0.5 bg-gradient-to-br from-secondary/20 to-secondary/0 rounded-2xl blur opacity-50 group-hover:opacity-75 transition duration-300" />
+              <div className="relative h-full bg-background/50 backdrop-blur-sm rounded-xl p-8 border border-secondary/20">
                 <h3 className="text-2xl font-bold mb-8 flex items-center gap-3">
                   <div className="p-2 rounded-lg bg-secondary/10">
                     <XCircle className="text-secondary h-6 w-6" />
@@ -120,8 +135,9 @@ export function Solution() {
             viewport={{ once: true }}
             transition={{ duration: 0.7 }}
           >
-            <Card className="relative group h-full bg-white">
-              <div className="relative h-full rounded-xl p-8 border border-primary/20">
+            <Card className="relative group h-full">
+              <div className="absolute -inset-0.5 bg-gradient-to-br from-primary/20 to-primary/0 rounded-2xl blur opacity-50 group-hover:opacity-75 transition duration-300" />
+              <div className="relative h-full bg-background/50 backdrop-blur-sm rounded-xl p-8 border border-primary/20">
                 <h3 className="text-2xl font-bold mb-8 flex items-center gap-3">
                   <div className="p-2 rounded-lg bg-primary/10">
                     <CheckCircle className="text-primary h-6 w-6" />
@@ -165,9 +181,15 @@ export function Solution() {
           transition={{ duration: 0.7 }}
           className="mt-24"
         >
-          <Card className="relative group overflow-hidden rounded-[2.5rem] bg-gray-50/80">
-            <div className="relative rounded-[2.5rem] border border-primary/10">              
-              <div className="relative p-12 md:p-16 bg-gray-50/80">
+          <Card className="relative group overflow-hidden rounded-[2.5rem]">
+            {/* Modern gradient background */}
+            <div className="absolute inset-0">
+              <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-background to-secondary/10" />
+              <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(var(--primary),0.1),transparent_50%),radial-gradient(circle_at_bottom_left,rgba(var(--secondary),0.1),transparent_50%)]" />
+            </div>
+            
+            <div className="relative backdrop-blur-xl rounded-[2.5rem] border border-primary/10">              
+              <div className="relative p-12 md:p-16">
                 <div className="flex flex-col lg:flex-row items-center gap-12 max-w-6xl mx-auto">
                   {/* Left Content */}
                   <div className="flex-1 text-left space-y-8">
@@ -176,7 +198,7 @@ export function Solution() {
                       whileInView={{ opacity: 1, y: 0 }}
                       transition={{ duration: 0.5 }}
                     >
-                      <span className="px-4 py-1.5 rounded-full bg-primary/10 text-primary text-sm font-medium border border-primary/20">
+                      <span className="px-4 py-1.5 rounded-full bg-primary/10 text-primary text-sm font-medium border border-primary/20 shadow-[0_0_15px_-3px_rgba(var(--primary),0.3)]">
                         Premium AI Valuation
                       </span>
                     </motion.div>
@@ -185,7 +207,7 @@ export function Solution() {
                       initial={{ opacity: 0, y: 10 }}
                       whileInView={{ opacity: 1, y: 0 }}
                       transition={{ duration: 0.5, delay: 0.1 }}
-                      className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-primary via-primary/90 to-primary bg-clip-text text-transparent"
+                      className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-primary via-primary/90 to-primary bg-clip-text text-transparent drop-shadow-[0_0_15px_rgba(var(--primary),0.3)]"
                     >
                       Experience Next-Gen Property Valuation
                     </motion.h3>
@@ -194,7 +216,7 @@ export function Solution() {
                       initial={{ opacity: 0, y: 10 }}
                       whileInView={{ opacity: 1, y: 0 }}
                       transition={{ duration: 0.5, delay: 0.2 }}
-                      className="text-lg text-muted-foreground/90 max-w-xl"
+                      className="text-lg text-muted-foreground/90 max-w-xl drop-shadow-[0_0_10px_rgba(var(--primary),0.1)]"
                     >
                       Join the future of real estate with our AI-powered valuation system, delivering unmatched accuracy and real-time market intelligence.
                     </motion.p>
@@ -211,36 +233,37 @@ export function Solution() {
                       {
                         stat: "99%",
                         label: "Accuracy Rate",
-                        gradient: "bg-white"
+                        gradient: "from-primary/20 to-primary/5"
                       },
                       {
                         stat: "50K+",
                         label: "Properties Valued",
-                        gradient: "bg-white"
+                        gradient: "from-secondary/20 to-secondary/5"
                       },
                       {
                         stat: "24/7",
                         label: "Real-time Updates",
-                        gradient: "bg-white"
+                        gradient: "from-primary/20 to-primary/5"
                       },
                       {
                         stat: "1M+",
                         label: "Data Points",
-                        gradient: "bg-white"
+                        gradient: "from-secondary/20 to-secondary/5"
                       }
                     ].map((item, i) => (
                       <div 
                         key={i} 
                         className={cn(
                           "flex flex-col justify-center p-6 rounded-2xl border border-primary/10",
+                          "bg-gradient-to-br backdrop-blur-sm",
                           item.gradient,
-                          "hover:bg-white/90 transition-colors duration-300"
+                          "shadow-[0_0_15px_-3px_rgba(var(--primary),0.2)]"
                         )}
                       >
-                        <span className="text-3xl font-bold text-foreground mb-1">
+                        <span className="text-3xl font-bold text-foreground mb-1 drop-shadow-[0_0_10px_rgba(var(--primary),0.2)]">
                           {item.stat}
                         </span>
-                        <span className="text-muted-foreground/80">
+                        <span className="text-muted-foreground/80 drop-shadow-[0_0_8px_rgba(var(--primary),0.1)]">
                           {item.label}
                         </span>
                       </div>

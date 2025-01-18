@@ -165,9 +165,9 @@ export function Solution() {
           transition={{ duration: 0.7 }}
           className="mt-24"
         >
-          <Card className="relative group overflow-hidden rounded-[2.5rem] bg-gray-50/80">
+          <Card className="relative group overflow-hidden rounded-[2.5rem] bg-white">
             <div className="relative rounded-[2.5rem] border border-primary/10">              
-              <div className="relative p-12 md:p-16 bg-gray-50/80">
+              <div className="relative p-12 md:p-16">
                 <div className="flex flex-col lg:flex-row items-center gap-12 max-w-6xl mx-auto">
                   {/* Left Content */}
                   <div className="flex-1 text-left space-y-8">
@@ -211,30 +211,29 @@ export function Solution() {
                       {
                         stat: "99%",
                         label: "Accuracy Rate",
-                        gradient: "bg-white"
+                        gradient: "bg-primary/5"
                       },
                       {
                         stat: "50K+",
                         label: "Properties Valued",
-                        gradient: "bg-white"
+                        gradient: "bg-secondary/5"
                       },
                       {
                         stat: "24/7",
                         label: "Real-time Updates",
-                        gradient: "bg-white"
+                        gradient: "bg-primary/5"
                       },
                       {
                         stat: "1M+",
                         label: "Data Points",
-                        gradient: "bg-white"
+                        gradient: "bg-secondary/5"
                       }
                     ].map((item, i) => (
                       <div 
                         key={i} 
                         className={cn(
                           "flex flex-col justify-center p-6 rounded-2xl border border-primary/10",
-                          item.gradient,
-                          "hover:bg-white/90 transition-colors duration-300"
+                          item.gradient
                         )}
                       >
                         <span className="text-3xl font-bold text-foreground mb-1">

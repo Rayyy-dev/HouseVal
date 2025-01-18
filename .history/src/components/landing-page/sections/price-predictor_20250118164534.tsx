@@ -173,7 +173,7 @@ export function PricePredictor() {
             <span className="text-foreground"> Predictor</span>
           </h2>
           <p className="text-lg text-muted-foreground/90 max-w-2xl mx-auto leading-relaxed">
-            Get an instant AI-powered estimate for your US property&apos;s market value
+            Get an instant AI-powered estimate for your US property's market value
           </p>
         </motion.div>
 
