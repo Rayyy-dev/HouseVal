@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import { Search, Bath, MapPin, Home, ArrowRight, DollarSign } from "lucide-react";
 import { Input } from "@/components/ui/input";
@@ -19,33 +19,59 @@ import {
   CommandGroup,
   CommandInput,
   CommandItem,
-  CommandList,
 } from "@/components/ui/command";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { locations } from "../housing/locations";
+
+// Predefined US cities with their coordinates and median income data
+const cities = [
+  { name: "New York, NY", lat: 40.7128, lng: -74.0060, medianIncome: 85000 },
+  { name: "Los Angeles, CA", lat: 34.0522, lng: -118.2437, medianIncome: 75000 },
+  { name: "Chicago, IL", lat: 41.8781, lng: -87.6298, medianIncome: 70000 },
+  { name: "Houston, TX", lat: 29.7604, lng: -95.3698, medianIncome: 65000 },
+  { name: "Phoenix, AZ", lat: 33.4484, lng: -112.0740, medianIncome: 62000 },
+  { name: "Philadelphia, PA", lat: 39.9526, lng: -75.1652, medianIncome: 63000 },
+  { name: "San Antonio, TX", lat: 29.4241, lng: -98.4936, medianIncome: 58000 },
+  { name: "San Diego, CA", lat: 32.7157, lng: -117.1611, medianIncome: 79000 },
+  { name: "Dallas, TX", lat: 32.7767, lng: -96.7970, medianIncome: 67000 },
+  { name: "San Jose, CA", lat: 37.3382, lng: -121.8863, medianIncome: 115000 },
+];
 
 export function PricePredictor() {
   const [isLoading, setIsLoading] = useState(false);
   const [open, setOpen] = useState(false);
+  const [location, setLocation] = useState("");
   const [bathrooms, setBathrooms] = useState("");
   const [distance, setDistance] = useState("");
   const [space, setSpace] = useState("");
   const [income, setIncome] = useState("");
   const [predictedPrice, setPredictedPrice] = useState<number | null>(null);
-  const [selectedLocation, setSelectedLocation] = useState<typeof locations[0] | null>(null);
+  const [selectedCity, setSelectedCity] = useState<typeof cities[0] | null>(null);
+
+  const calculateDistance = (lat1: number, lon1: number, lat2: number, lon2: number) => {
+    const R = 3959; // Earth's radius in miles
+    const dLat = (lat2 - lat1) * Math.PI / 180;
+    const dLon = (lon2 - lon1) * Math.PI / 180;
+    const a = 
+      Math.sin(dLat/2) * Math.sin(dLat/2) +
+      Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * 
+      Math.sin(dLon/2) * Math.sin(dLon/2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+    return R * c;
+  };
 
   // Simple price prediction algorithm
   const predictPrice = (params: {
     income: number;
     bathrooms: number;
+    distance: number;
     space: number;
-    locationFactor: number;
+    cityMedianIncome: number;
   }) => {
-    const { income, bathrooms, space, locationFactor } = params;
+    const { income, bathrooms, distance, space, cityMedianIncome } = params;
     
     // Base price calculation
     let basePrice = space * 200; // $200 per sq ft base
@@ -53,14 +79,15 @@ export function PricePredictor() {
     // Adjust for bathrooms
     basePrice *= (1 + (bathrooms * 0.15)); // Each bathroom adds 15%
     
-    // Apply location factor
-    basePrice *= locationFactor;
+    // Adjust for distance from city center
+    const distanceMultiplier = Math.max(0.7, 1 - (distance * 0.01)); // Reduce price by 1% per mile, min 70%
+    basePrice *= distanceMultiplier;
     
-    // Adjust for income (higher income areas tend to have higher prices)
-    const incomeAdjustment = Math.min(2, Math.max(0.5, income / 100000));
-    basePrice *= incomeAdjustment;
+    // Adjust for income factors
+    const incomeRatio = income / cityMedianIncome;
+    basePrice *= (0.8 + (incomeRatio * 0.4)); // Income adjustment
     
-    // Add market variation (+/- 10%)
+    // Add random market variation (+/- 10%)
     const marketVariation = 0.9 + (Math.random() * 0.2);
     basePrice *= marketVariation;
     
@@ -72,13 +99,14 @@ export function PricePredictor() {
     setIsLoading(true);
     
     try {
-      if (!selectedLocation) throw new Error("Please select a location");
+      if (!selectedCity) throw new Error("Please select a city");
       
       const price = predictPrice({
         income: parseFloat(income),
         bathrooms: parseFloat(bathrooms),
+        distance: parseFloat(distance),
         space: parseFloat(space),
-        locationFactor: selectedLocation.factor,
+        cityMedianIncome: selectedCity.medianIncome,
       });
       
       setPredictedPrice(price);
@@ -159,31 +187,29 @@ export function PricePredictor() {
                         aria-expanded={open}
                         className="w-full justify-between bg-background/50"
                       >
-                        {selectedLocation ? selectedLocation.label : "Select location..."}
+                        {selectedCity ? selectedCity.name : "Select city..."}
                         <Search className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                       </Button>
                     </PopoverTrigger>
-                    <PopoverContent className="p-0" style={{ width: 'var(--radix-popover-trigger-width)' }}>
+                    <PopoverContent className="w-full p-0">
                       <Command>
-                        <CommandInput placeholder="Search locations..." />
-                        <CommandList>
-                          <CommandEmpty>No location found.</CommandEmpty>
-                          <CommandGroup>
-                            {locations.map((location) => (
-                              <CommandItem
-                                key={location.value}
-                                value={location.label}
-                                onSelect={() => {
-                                  setSelectedLocation(location);
-                                  setOpen(false);
-                                }}
-                              >
-                                <MapPin className="mr-2 h-4 w-4" />
-                                {location.label}
-                              </CommandItem>
-                            ))}
-                          </CommandGroup>
-                        </CommandList>
+                        <CommandInput placeholder="Search cities..." />
+                        <CommandEmpty>No city found.</CommandEmpty>
+                        <CommandGroup>
+                          {cities.map((city) => (
+                            <CommandItem
+                              key={city.name}
+                              onSelect={() => {
+                                setSelectedCity(city);
+                                setIncome(city.medianIncome.toString());
+                                setOpen(false);
+                              }}
+                            >
+                              <MapPin className="mr-2 h-4 w-4" />
+                              {city.name}
+                            </CommandItem>
+                          ))}
+                        </CommandGroup>
                       </Command>
                     </PopoverContent>
                   </Popover>
@@ -275,7 +301,7 @@ export function PricePredictor() {
                       ${predictedPrice.toLocaleString()}
                     </div>
                     <p className="text-sm text-muted-foreground mt-2">
-                      This estimate is based on current market conditions and similar properties in {selectedLocation?.label}
+                      This estimate is based on current market conditions and similar properties in {selectedCity?.name}
                     </p>
                   </CardContent>
                 </Card>
