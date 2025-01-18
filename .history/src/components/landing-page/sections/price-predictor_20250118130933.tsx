@@ -27,90 +27,66 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { locations } from "../housing/locations";
-import { toast } from "sonner";
-
-interface PredictionResult {
-  price: number;
-  confidence: number;
-  features: {
-    name: string;
-    impact: number;
-  }[];
-}
 
 export function PricePredictor() {
   const [isLoading, setIsLoading] = useState(false);
   const [open, setOpen] = useState(false);
-  const [searchQuery, setSearchQuery] = useState("");
   const [bathrooms, setBathrooms] = useState("");
+  const [distance, setDistance] = useState("");
   const [space, setSpace] = useState("");
   const [income, setIncome] = useState("");
-  const [result, setResult] = useState<PredictionResult | null>(null);
-  const [selectedLocation, setSelectedLocation] = useState<(typeof locations)[number] | null>(null);
+  const [predictedPrice, setPredictedPrice] = useState<number | null>(null);
+  const [selectedLocation, setSelectedLocation] = useState<typeof locations[0] | null>(null);
 
-  // Filter locations based on search query
-  const filteredLocations = locations.filter((location) =>
-    location.label.toLowerCase().includes(searchQuery.toLowerCase())
-  );
-
-  // Validate all fields are filled
-  const isFormValid = () => {
-    if (!selectedLocation) {
-      toast.error("Please select a location");
-      return false;
-    }
-    if (!bathrooms || parseFloat(bathrooms) <= 0) {
-      toast.error("Please enter a valid number of bathrooms");
-      return false;
-    }
-    if (!space || parseFloat(space) <= 0) {
-      toast.error("Please enter a valid living space");
-      return false;
-    }
-    return true;
+  // Simple price prediction algorithm
+  const predictPrice = (params: {
+    income: number;
+    bathrooms: number;
+    space: number;
+    locationFactor: number;
+  }) => {
+    const { income, bathrooms, space, locationFactor } = params;
+    
+    // Base price calculation
+    let basePrice = space * 200; // $200 per sq ft base
+    
+    // Adjust for bathrooms
+    basePrice *= (1 + (bathrooms * 0.15)); // Each bathroom adds 15%
+    
+    // Apply location factor
+    basePrice *= locationFactor;
+    
+    // Adjust for income (higher income areas tend to have higher prices)
+    const incomeAdjustment = Math.min(2, Math.max(0.5, income / 100000));
+    basePrice *= incomeAdjustment;
+    
+    // Add market variation (+/- 10%)
+    const marketVariation = 0.9 + (Math.random() * 0.2);
+    basePrice *= marketVariation;
+    
+    return Math.round(basePrice);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
-    if (!isFormValid()) {
-      return;
-    }
-
     setIsLoading(true);
     
     try {
-      const response = await fetch('/api/predict-price', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          bathrooms: parseFloat(bathrooms),
-          distance: selectedLocation ? calculateDistanceToCenter(selectedLocation) : 0,
-          space: parseFloat(space),
-        }),
+      if (!selectedLocation) throw new Error("Please select a location");
+      
+      const price = predictPrice({
+        income: parseFloat(income),
+        bathrooms: parseFloat(bathrooms),
+        space: parseFloat(space),
+        locationFactor: selectedLocation.factor,
       });
-
-      if (!response.ok) {
-        throw new Error('Failed to get prediction');
-      }
-
-      const data = await response.json();
-      setResult(data);
-      toast.success("Price estimate calculated successfully!");
+      
+      setPredictedPrice(price);
     } catch (error) {
       console.error('Error predicting price:', error);
-      toast.error("Failed to calculate price estimate");
     } finally {
       setIsLoading(false);
     }
-  };
-
-  // Calculate distance to city center based on location
-  const calculateDistanceToCenter = (location: typeof locations[number]) => {
-    // This is a simplified calculation - in real app would use actual coordinates
-    return Math.round(5 + (Math.random() * 10)); // Random distance between 5-15 miles
   };
 
   return (
@@ -145,15 +121,15 @@ export function PricePredictor() {
             className="inline-block mb-6"
           >
             <span className="px-5 py-2 rounded-full bg-primary/8 text-primary text-sm font-medium border border-primary/10">
-              US Housing AI Predictor
+              AI Price Predictor
             </span>
           </motion.div>
           <h2 className="text-4xl md:text-5xl font-bold mb-6 tracking-tight">
-            <span className="bg-gradient-to-r from-primary/90 via-primary to-primary/90 bg-clip-text text-transparent">US House Price</span>
+            <span className="bg-gradient-to-r from-primary/90 via-primary to-primary/90 bg-clip-text text-transparent">AI House Price</span>
             <span className="text-foreground"> Predictor</span>
           </h2>
           <p className="text-lg text-muted-foreground/90 max-w-2xl mx-auto leading-relaxed">
-            Get an instant AI-powered estimate for your US property's market value
+            Get an instant AI-powered estimate for your property's market value
           </p>
         </motion.div>
 
@@ -188,26 +164,18 @@ export function PricePredictor() {
                       </Button>
                     </PopoverTrigger>
                     <PopoverContent className="p-0" style={{ width: 'var(--radix-popover-trigger-width)' }}>
-                      <Command shouldFilter={false}>
-                        <CommandInput 
-                          placeholder="Search locations..." 
-                          value={searchQuery}
-                          onValueChange={setSearchQuery}
-                        />
+                      <Command>
+                        <CommandInput placeholder="Search locations..." />
                         <CommandList>
                           <CommandEmpty>No location found.</CommandEmpty>
                           <CommandGroup>
-                            {filteredLocations.map((location) => (
+                            {locations.map((location) => (
                               <CommandItem
                                 key={location.value}
-                                value={location.value}
-                                onSelect={(value) => {
-                                  const selected = locations.find(l => l.value === value);
-                                  if (selected) {
-                                    setSelectedLocation(selected);
-                                    setOpen(false);
-                                    setSearchQuery("");
-                                  }
+                                value={location.label}
+                                onSelect={() => {
+                                  setSelectedLocation(location);
+                                  setOpen(false);
                                 }}
                               >
                                 <MapPin className="mr-2 h-4 w-4" />
@@ -219,6 +187,21 @@ export function PricePredictor() {
                       </Command>
                     </PopoverContent>
                   </Popover>
+                </div>
+
+                {/* Income Input */}
+                <div className="space-y-2">
+                  <Label className="text-sm font-medium text-foreground/90">Household Income</Label>
+                  <div className="relative">
+                    <DollarSign className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                    <Input
+                      type="number"
+                      placeholder="e.g., 75000"
+                      value={income}
+                      onChange={(e) => setIncome(e.target.value)}
+                      className="pl-9 bg-background/50 border-border/40 hover:border-primary/30 focus:border-primary/50 transition-colors"
+                    />
+                  </div>
                 </div>
 
                 {/* Bathrooms Input */}
@@ -237,7 +220,7 @@ export function PricePredictor() {
                 </div>
 
                 {/* Living Space Input */}
-                <div className="space-y-2 md:col-span-2">
+                <div className="space-y-2">
                   <Label className="text-sm font-medium text-foreground/90">Living Space (sq ft)</Label>
                   <div className="relative">
                     <Home className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
@@ -275,7 +258,7 @@ export function PricePredictor() {
             </form>
 
             {/* Results Card */}
-            {result && selectedLocation && bathrooms && space && (
+            {predictedPrice !== null && (
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -285,37 +268,15 @@ export function PricePredictor() {
                 <Card className="bg-background/50 backdrop-blur-sm border-border/40">
                   <CardHeader>
                     <CardTitle>Estimated Price</CardTitle>
-                    <CardDescription>Based on AI analysis with {result.confidence}% confidence</CardDescription>
+                    <CardDescription>Based on market analysis and local data</CardDescription>
                   </CardHeader>
-                  <CardContent className="space-y-6">
-                    <div>
-                      <div className="text-4xl font-bold text-primary">
-                        ${result.price.toLocaleString()}
-                      </div>
-                      <p className="text-sm text-muted-foreground mt-2">
-                        This estimate is based on current market conditions and similar properties in {selectedLocation.label}
-                      </p>
+                  <CardContent>
+                    <div className="text-4xl font-bold text-primary">
+                      ${predictedPrice.toLocaleString()}
                     </div>
-
-                    <div className="space-y-3">
-                      <h4 className="font-medium">Price Factors</h4>
-                      <div className="space-y-2">
-                        {result.features.map((feature) => (
-                          <div key={feature.name} className="flex items-center justify-between">
-                            <span className="text-sm text-muted-foreground">{feature.name}</span>
-                            <div className="flex items-center gap-2">
-                              <div className="w-32 h-2 bg-muted rounded-full overflow-hidden">
-                                <div 
-                                  className="h-full bg-primary rounded-full"
-                                  style={{ width: `${feature.impact}%` }}
-                                />
-                              </div>
-                              <span className="text-sm font-medium w-8">{feature.impact}%</span>
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
+                    <p className="text-sm text-muted-foreground mt-2">
+                      This estimate is based on current market conditions and similar properties in {selectedLocation?.label}
+                    </p>
                   </CardContent>
                 </Card>
               </motion.div>

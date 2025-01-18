@@ -107,39 +107,46 @@ export function Benefits() {
             >
               <motion.div 
                 className="relative group h-full"
-                whileHover={{ translateY: -3 }}
+                whileHover={{ translateY: -3, scale: 1.02 }}
                 transition={{ duration: 0.2, ease: "easeOut" }}
               >
-                <div className="absolute -inset-0.5 bg-gradient-to-b from-primary/10 to-transparent rounded-2xl blur opacity-0 group-hover:opacity-100 transition duration-300" />
-                <div className="relative h-full bg-background/50 backdrop-blur-sm rounded-xl p-8 border border-border/40 group-hover:border-primary/20 transition-all duration-300 flex flex-col">
-                  {/* Enhanced Icon */}
-                  <div className="mb-6 relative flex-shrink-0">
-                    <div className="absolute inset-0 bg-primary/10 rounded-xl blur-lg group-hover:blur-xl transition-all duration-300" />
+                {/* Improved gradient background effect */}
+                <div className="absolute -inset-[1px] bg-gradient-to-br from-primary/20 via-primary/10 to-transparent rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-all duration-500" />
+                
+                {/* Glass effect background */}
+                <div className="relative h-full bg-background/60 backdrop-blur-xl rounded-2xl p-8 border border-border/40 group-hover:border-primary/30 transition-all duration-300 flex flex-col shadow-lg hover:shadow-xl">
+                  {/* Enhanced Icon Container */}
+                  <div className="mb-8 relative flex-shrink-0">
+                    <div className="absolute -inset-1 bg-gradient-to-br from-primary/30 to-primary/10 rounded-xl blur-2xl group-hover:blur-3xl transition-all duration-500 opacity-0 group-hover:opacity-100" />
                     <motion.div 
-                      whileHover={{ scale: 1.05 }}
+                      whileHover={{ scale: 1.05, rotate: 5 }}
                       transition={{ duration: 0.2 }}
                       className={cn(
-                        "relative w-14 h-14 rounded-xl flex items-center justify-center",
-                        "bg-gradient-to-br shadow-lg",
-                        benefit.gradient
+                        "relative w-16 h-16 rounded-2xl flex items-center justify-center",
+                        "bg-gradient-to-br from-primary/90 to-primary shadow-lg",
+                        "before:absolute before:inset-0 before:bg-primary/20 before:rounded-2xl before:blur-xl group-hover:before:blur-2xl before:transition-all before:duration-300"
                       )}
                     >
-                      <benefit.icon className="w-7 h-7 text-background" />
+                      <benefit.icon className="w-8 h-8 text-background relative z-10" />
                     </motion.div>
                   </div>
 
-                  {/* Enhanced Content */}
-                  <div className="flex flex-col flex-grow">
-                    <h3 className="text-xl font-semibold mb-3 text-foreground group-hover:text-primary transition-colors">
+                  {/* Enhanced Content Container */}
+                  <div className="flex flex-col flex-grow space-y-4">
+                    <h3 className="text-xl font-bold bg-gradient-to-br from-foreground to-foreground/80 bg-clip-text text-transparent group-hover:from-primary group-hover:to-primary/80 transition-all duration-300">
                       {benefit.title}
                     </h3>
-                    <p className="text-muted-foreground/90 group-hover:text-muted-foreground transition-colors leading-relaxed">
+                    <p className="text-muted-foreground/80 group-hover:text-muted-foreground transition-colors leading-relaxed">
                       {benefit.description}
                     </p>
                   </div>
 
-                  {/* Subtle Corner Accent */}
-                  <div className="absolute top-6 right-6 w-12 h-12 bg-primary/5 rounded-full blur-xl group-hover:bg-primary/10 transition-all duration-300" />
+                  {/* Enhanced Corner Accents */}
+                  <div className="absolute top-4 right-4 w-20 h-20 bg-primary/5 rounded-full blur-2xl group-hover:bg-primary/10 transition-all duration-500" />
+                  <div className="absolute bottom-4 left-4 w-16 h-16 bg-primary/5 rounded-full blur-xl group-hover:bg-primary/10 transition-all duration-500 opacity-0 group-hover:opacity-100" />
+                  
+                  {/* Subtle line decoration */}
+                  <div className="absolute bottom-6 left-8 right-8 h-px bg-gradient-to-r from-transparent via-primary/20 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500" />
                 </div>
               </motion.div>
             </motion.div>

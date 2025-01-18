@@ -23,6 +23,8 @@
 # misc
 .DS_Store
 *.pem
+.history/    # Added VSCode history folder
+.vscode/     # Added VSCode settings
 
 # debug
 npm-debug.log*
@@ -31,6 +33,7 @@ yarn-error.log*
 
 # env files (can opt-in for committing if needed)
 .env*
+.env.local
 
 # vercel
 .vercel
@@ -38,3 +41,7 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# private rules and documentation
+shadcn-rules.txt
+.cursorrules

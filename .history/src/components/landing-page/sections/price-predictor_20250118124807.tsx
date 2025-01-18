@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import { Search, Bath, MapPin, Home, ArrowRight, DollarSign } from "lucide-react";
 import { Input } from "@/components/ui/input";
@@ -13,70 +13,84 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-  CommandList,
-} from "@/components/ui/command";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import { locations } from "../housing/locations";
-import { toast } from "sonner";
 
-interface PredictionResult {
-  price: number;
-  confidence: number;
-  features: {
-    name: string;
-    impact: number;
-  }[];
+declare global {
+  interface Window {
+    google: any;
+    initAutocomplete: () => void;
+  }
 }
 
 export function PricePredictor() {
   const [isLoading, setIsLoading] = useState(false);
-  const [open, setOpen] = useState(false);
-  const [searchQuery, setSearchQuery] = useState("");
+  const [location, setLocation] = useState("");
   const [bathrooms, setBathrooms] = useState("");
+  const [distance, setDistance] = useState("");
   const [space, setSpace] = useState("");
   const [income, setIncome] = useState("");
-  const [result, setResult] = useState<PredictionResult | null>(null);
-  const [selectedLocation, setSelectedLocation] = useState<(typeof locations)[number] | null>(null);
+  const [predictedPrice, setPredictedPrice] = useState<number | null>(null);
+  const [coordinates, setCoordinates] = useState<{ lat: number; lng: number } | null>(null);
+  const autocompleteInput = useRef<HTMLInputElement>(null);
 
-  // Filter locations based on search query
-  const filteredLocations = locations.filter((location) =>
-    location.label.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  useEffect(() => {
+    // Load Google Maps JavaScript API
+    const script = document.createElement("script");
+    script.src = `https://maps.googleapis.com/maps/api/js?key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}&libraries=places&callback=initAutocomplete`;
+    script.async = true;
+    script.defer = true;
 
-  // Validate all fields are filled
-  const isFormValid = () => {
-    if (!selectedLocation) {
-      toast.error("Please select a location");
-      return false;
-    }
-    if (!bathrooms || parseFloat(bathrooms) <= 0) {
-      toast.error("Please enter a valid number of bathrooms");
-      return false;
-    }
-    if (!space || parseFloat(space) <= 0) {
-      toast.error("Please enter a valid living space");
-      return false;
-    }
-    return true;
+    window.initAutocomplete = () => {
+      if (autocompleteInput.current) {
+        const autocomplete = new window.google.maps.places.Autocomplete(
+          autocompleteInput.current,
+          { types: ["address"] }
+        );
+
+        autocomplete.addListener("place_changed", () => {
+          const place = autocomplete.getPlace();
+          if (place.geometry?.location) {
+            setCoordinates({
+              lat: place.geometry.location.lat(),
+              lng: place.geometry.location.lng(),
+            });
+            setLocation(place.formatted_address || "");
+            
+            // Calculate distance to city center (New York City coordinates)
+            const cityCenter = { lat: 40.7128, lng: -74.0060 };
+            const distance = calculateDistance(
+              place.geometry.location.lat(),
+              place.geometry.location.lng(),
+              cityCenter.lat,
+              cityCenter.lng
+            );
+            setDistance(distance.toFixed(2));
+          }
+        });
+      }
+    };
+
+    document.head.appendChild(script);
+
+    return () => {
+      document.head.removeChild(script);
+      delete window.initAutocomplete;
+    };
+  }, []);
+
+  const calculateDistance = (lat1: number, lon1: number, lat2: number, lon2: number) => {
+    const R = 3959; // Earth's radius in miles
+    const dLat = (lat2 - lat1) * Math.PI / 180;
+    const dLon = (lon2 - lon1) * Math.PI / 180;
+    const a = 
+      Math.sin(dLat/2) * Math.sin(dLat/2) +
+      Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * 
+      Math.sin(dLon/2) * Math.sin(dLon/2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+    return R * c;
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
-    if (!isFormValid()) {
-      return;
-    }
-
     setIsLoading(true);
     
     try {
@@ -86,31 +100,22 @@ export function PricePredictor() {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
+          income: parseFloat(income),
           bathrooms: parseFloat(bathrooms),
-          distance: selectedLocation ? calculateDistanceToCenter(selectedLocation) : 0,
+          distance: parseFloat(distance),
           space: parseFloat(space),
         }),
       });
 
-      if (!response.ok) {
-        throw new Error('Failed to get prediction');
-      }
-
       const data = await response.json();
-      setResult(data);
-      toast.success("Price estimate calculated successfully!");
+      if (data.price) {
+        setPredictedPrice(data.price);
+      }
     } catch (error) {
       console.error('Error predicting price:', error);
-      toast.error("Failed to calculate price estimate");
     } finally {
       setIsLoading(false);
     }
-  };
-
-  // Calculate distance to city center based on location
-  const calculateDistanceToCenter = (location: typeof locations[number]) => {
-    // This is a simplified calculation - in real app would use actual coordinates
-    return Math.round(5 + (Math.random() * 10)); // Random distance between 5-15 miles
   };
 
   return (
@@ -145,15 +150,15 @@ export function PricePredictor() {
             className="inline-block mb-6"
           >
             <span className="px-5 py-2 rounded-full bg-primary/8 text-primary text-sm font-medium border border-primary/10">
-              US Housing AI Predictor
+              AI Price Predictor
             </span>
           </motion.div>
           <h2 className="text-4xl md:text-5xl font-bold mb-6 tracking-tight">
-            <span className="bg-gradient-to-r from-primary/90 via-primary to-primary/90 bg-clip-text text-transparent">US House Price</span>
+            <span className="bg-gradient-to-r from-primary/90 via-primary to-primary/90 bg-clip-text text-transparent">AI House Price</span>
             <span className="text-foreground"> Predictor</span>
           </h2>
           <p className="text-lg text-muted-foreground/90 max-w-2xl mx-auto leading-relaxed">
-            Get an instant AI-powered estimate for your US property's market value
+            Get an instant AI-powered estimate for your property's market value
           </p>
         </motion.div>
 
@@ -175,50 +180,30 @@ export function PricePredictor() {
                 {/* Location Input */}
                 <div className="space-y-2">
                   <Label className="text-sm font-medium text-foreground/90">Location</Label>
-                  <Popover open={open} onOpenChange={setOpen}>
-                    <PopoverTrigger asChild>
-                      <Button
-                        variant="outline"
-                        role="combobox"
-                        aria-expanded={open}
-                        className="w-full justify-between bg-background/50"
-                      >
-                        {selectedLocation ? selectedLocation.label : "Select location..."}
-                        <Search className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-                      </Button>
-                    </PopoverTrigger>
-                    <PopoverContent className="p-0" style={{ width: 'var(--radix-popover-trigger-width)' }}>
-                      <Command shouldFilter={false}>
-                        <CommandInput 
-                          placeholder="Search locations..." 
-                          value={searchQuery}
-                          onValueChange={setSearchQuery}
-                        />
-                        <CommandList>
-                          <CommandEmpty>No location found.</CommandEmpty>
-                          <CommandGroup>
-                            {filteredLocations.map((location) => (
-                              <CommandItem
-                                key={location.value}
-                                value={location.value}
-                                onSelect={(value) => {
-                                  const selected = locations.find(l => l.value === value);
-                                  if (selected) {
-                                    setSelectedLocation(selected);
-                                    setOpen(false);
-                                    setSearchQuery("");
-                                  }
-                                }}
-                              >
-                                <MapPin className="mr-2 h-4 w-4" />
-                                {location.label}
-                              </CommandItem>
-                            ))}
-                          </CommandGroup>
-                        </CommandList>
-                      </Command>
-                    </PopoverContent>
-                  </Popover>
+                  <div className="relative">
+                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                    <Input
+                      ref={autocompleteInput}
+                      type="text"
+                      placeholder="Search location..."
+                      className="pl-9 bg-background/50 border-border/40 hover:border-primary/30 focus:border-primary/50 transition-colors"
+                    />
+                  </div>
+                </div>
+
+                {/* Income Input */}
+                <div className="space-y-2">
+                  <Label className="text-sm font-medium text-foreground/90">Median Household Income</Label>
+                  <div className="relative">
+                    <DollarSign className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                    <Input
+                      type="number"
+                      placeholder="e.g., 75000"
+                      value={income}
+                      onChange={(e) => setIncome(e.target.value)}
+                      className="pl-9 bg-background/50 border-border/40 hover:border-primary/30 focus:border-primary/50 transition-colors"
+                    />
+                  </div>
                 </div>
 
                 {/* Bathrooms Input */}
@@ -237,7 +222,7 @@ export function PricePredictor() {
                 </div>
 
                 {/* Living Space Input */}
-                <div className="space-y-2 md:col-span-2">
+                <div className="space-y-2">
                   <Label className="text-sm font-medium text-foreground/90">Living Space (sq ft)</Label>
                   <div className="relative">
                     <Home className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
@@ -275,7 +260,7 @@ export function PricePredictor() {
             </form>
 
             {/* Results Card */}
-            {result && selectedLocation && bathrooms && space && (
+            {predictedPrice !== null && (
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -285,37 +270,15 @@ export function PricePredictor() {
                 <Card className="bg-background/50 backdrop-blur-sm border-border/40">
                   <CardHeader>
                     <CardTitle>Estimated Price</CardTitle>
-                    <CardDescription>Based on AI analysis with {result.confidence}% confidence</CardDescription>
+                    <CardDescription>Based on AI analysis of market data</CardDescription>
                   </CardHeader>
-                  <CardContent className="space-y-6">
-                    <div>
-                      <div className="text-4xl font-bold text-primary">
-                        ${result.price.toLocaleString()}
-                      </div>
-                      <p className="text-sm text-muted-foreground mt-2">
-                        This estimate is based on current market conditions and similar properties in {selectedLocation.label}
-                      </p>
+                  <CardContent>
+                    <div className="text-4xl font-bold text-primary">
+                      ${predictedPrice.toLocaleString()}
                     </div>
-
-                    <div className="space-y-3">
-                      <h4 className="font-medium">Price Factors</h4>
-                      <div className="space-y-2">
-                        {result.features.map((feature) => (
-                          <div key={feature.name} className="flex items-center justify-between">
-                            <span className="text-sm text-muted-foreground">{feature.name}</span>
-                            <div className="flex items-center gap-2">
-                              <div className="w-32 h-2 bg-muted rounded-full overflow-hidden">
-                                <div 
-                                  className="h-full bg-primary rounded-full"
-                                  style={{ width: `${feature.impact}%` }}
-                                />
-                              </div>
-                              <span className="text-sm font-medium w-8">{feature.impact}%</span>
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
+                    <p className="text-sm text-muted-foreground mt-2">
+                      This estimate is based on current market conditions and similar properties in the area
+                    </p>
                   </CardContent>
                 </Card>
               </motion.div>

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import { Search, Bath, MapPin, Home, ArrowRight, DollarSign } from "lucide-react";
 import { Input } from "@/components/ui/input";
@@ -19,98 +19,102 @@ import {
   CommandGroup,
   CommandInput,
   CommandItem,
-  CommandList,
 } from "@/components/ui/command";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { locations } from "../housing/locations";
-import { toast } from "sonner";
 
-interface PredictionResult {
-  price: number;
-  confidence: number;
-  features: {
-    name: string;
-    impact: number;
-  }[];
-}
+// Predefined US cities with their coordinates and median income data
+const cities = [
+  { name: "New York, NY", lat: 40.7128, lng: -74.0060, medianIncome: 85000 },
+  { name: "Los Angeles, CA", lat: 34.0522, lng: -118.2437, medianIncome: 75000 },
+  { name: "Chicago, IL", lat: 41.8781, lng: -87.6298, medianIncome: 70000 },
+  { name: "Houston, TX", lat: 29.7604, lng: -95.3698, medianIncome: 65000 },
+  { name: "Phoenix, AZ", lat: 33.4484, lng: -112.0740, medianIncome: 62000 },
+  { name: "Philadelphia, PA", lat: 39.9526, lng: -75.1652, medianIncome: 63000 },
+  { name: "San Antonio, TX", lat: 29.4241, lng: -98.4936, medianIncome: 58000 },
+  { name: "San Diego, CA", lat: 32.7157, lng: -117.1611, medianIncome: 79000 },
+  { name: "Dallas, TX", lat: 32.7767, lng: -96.7970, medianIncome: 67000 },
+  { name: "San Jose, CA", lat: 37.3382, lng: -121.8863, medianIncome: 115000 },
+];
 
 export function PricePredictor() {
   const [isLoading, setIsLoading] = useState(false);
   const [open, setOpen] = useState(false);
-  const [searchQuery, setSearchQuery] = useState("");
+  const [location, setLocation] = useState("");
   const [bathrooms, setBathrooms] = useState("");
+  const [distance, setDistance] = useState("");
   const [space, setSpace] = useState("");
   const [income, setIncome] = useState("");
-  const [result, setResult] = useState<PredictionResult | null>(null);
-  const [selectedLocation, setSelectedLocation] = useState<(typeof locations)[number] | null>(null);
+  const [predictedPrice, setPredictedPrice] = useState<number | null>(null);
+  const [selectedCity, setSelectedCity] = useState<typeof cities[0] | null>(null);
 
-  // Filter locations based on search query
-  const filteredLocations = locations.filter((location) =>
-    location.label.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  const calculateDistance = (lat1: number, lon1: number, lat2: number, lon2: number) => {
+    const R = 3959; // Earth's radius in miles
+    const dLat = (lat2 - lat1) * Math.PI / 180;
+    const dLon = (lon2 - lon1) * Math.PI / 180;
+    const a = 
+      Math.sin(dLat/2) * Math.sin(dLat/2) +
+      Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * 
+      Math.sin(dLon/2) * Math.sin(dLon/2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+    return R * c;
+  };
 
-  // Validate all fields are filled
-  const isFormValid = () => {
-    if (!selectedLocation) {
-      toast.error("Please select a location");
-      return false;
-    }
-    if (!bathrooms || parseFloat(bathrooms) <= 0) {
-      toast.error("Please enter a valid number of bathrooms");
-      return false;
-    }
-    if (!space || parseFloat(space) <= 0) {
-      toast.error("Please enter a valid living space");
-      return false;
-    }
-    return true;
+  // Simple price prediction algorithm
+  const predictPrice = (params: {
+    income: number;
+    bathrooms: number;
+    distance: number;
+    space: number;
+    cityMedianIncome: number;
+  }) => {
+    const { income, bathrooms, distance, space, cityMedianIncome } = params;
+    
+    // Base price calculation
+    let basePrice = space * 200; // $200 per sq ft base
+    
+    // Adjust for bathrooms
+    basePrice *= (1 + (bathrooms * 0.15)); // Each bathroom adds 15%
+    
+    // Adjust for distance from city center
+    const distanceMultiplier = Math.max(0.7, 1 - (distance * 0.01)); // Reduce price by 1% per mile, min 70%
+    basePrice *= distanceMultiplier;
+    
+    // Adjust for income factors
+    const incomeRatio = income / cityMedianIncome;
+    basePrice *= (0.8 + (incomeRatio * 0.4)); // Income adjustment
+    
+    // Add random market variation (+/- 10%)
+    const marketVariation = 0.9 + (Math.random() * 0.2);
+    basePrice *= marketVariation;
+    
+    return Math.round(basePrice);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
-    if (!isFormValid()) {
-      return;
-    }
-
     setIsLoading(true);
     
     try {
-      const response = await fetch('/api/predict-price', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          bathrooms: parseFloat(bathrooms),
-          distance: selectedLocation ? calculateDistanceToCenter(selectedLocation) : 0,
-          space: parseFloat(space),
-        }),
+      if (!selectedCity) throw new Error("Please select a city");
+      
+      const price = predictPrice({
+        income: parseFloat(income),
+        bathrooms: parseFloat(bathrooms),
+        distance: parseFloat(distance),
+        space: parseFloat(space),
+        cityMedianIncome: selectedCity.medianIncome,
       });
-
-      if (!response.ok) {
-        throw new Error('Failed to get prediction');
-      }
-
-      const data = await response.json();
-      setResult(data);
-      toast.success("Price estimate calculated successfully!");
+      
+      setPredictedPrice(price);
     } catch (error) {
       console.error('Error predicting price:', error);
-      toast.error("Failed to calculate price estimate");
     } finally {
       setIsLoading(false);
     }
-  };
-
-  // Calculate distance to city center based on location
-  const calculateDistanceToCenter = (location: typeof locations[number]) => {
-    // This is a simplified calculation - in real app would use actual coordinates
-    return Math.round(5 + (Math.random() * 10)); // Random distance between 5-15 miles
   };
 
   return (
@@ -145,15 +149,15 @@ export function PricePredictor() {
             className="inline-block mb-6"
           >
             <span className="px-5 py-2 rounded-full bg-primary/8 text-primary text-sm font-medium border border-primary/10">
-              US Housing AI Predictor
+              AI Price Predictor
             </span>
           </motion.div>
           <h2 className="text-4xl md:text-5xl font-bold mb-6 tracking-tight">
-            <span className="bg-gradient-to-r from-primary/90 via-primary to-primary/90 bg-clip-text text-transparent">US House Price</span>
+            <span className="bg-gradient-to-r from-primary/90 via-primary to-primary/90 bg-clip-text text-transparent">AI House Price</span>
             <span className="text-foreground"> Predictor</span>
           </h2>
           <p className="text-lg text-muted-foreground/90 max-w-2xl mx-auto leading-relaxed">
-            Get an instant AI-powered estimate for your US property's market value
+            Get an instant AI-powered estimate for your property's market value
           </p>
         </motion.div>
 
@@ -183,42 +187,47 @@ export function PricePredictor() {
                         aria-expanded={open}
                         className="w-full justify-between bg-background/50"
                       >
-                        {selectedLocation ? selectedLocation.label : "Select location..."}
+                        {selectedCity ? selectedCity.name : "Select city..."}
                         <Search className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                       </Button>
                     </PopoverTrigger>
-                    <PopoverContent className="p-0" style={{ width: 'var(--radix-popover-trigger-width)' }}>
-                      <Command shouldFilter={false}>
-                        <CommandInput 
-                          placeholder="Search locations..." 
-                          value={searchQuery}
-                          onValueChange={setSearchQuery}
-                        />
-                        <CommandList>
-                          <CommandEmpty>No location found.</CommandEmpty>
-                          <CommandGroup>
-                            {filteredLocations.map((location) => (
-                              <CommandItem
-                                key={location.value}
-                                value={location.value}
-                                onSelect={(value) => {
-                                  const selected = locations.find(l => l.value === value);
-                                  if (selected) {
-                                    setSelectedLocation(selected);
-                                    setOpen(false);
-                                    setSearchQuery("");
-                                  }
-                                }}
-                              >
-                                <MapPin className="mr-2 h-4 w-4" />
-                                {location.label}
-                              </CommandItem>
-                            ))}
-                          </CommandGroup>
-                        </CommandList>
+                    <PopoverContent className="w-full p-0">
+                      <Command>
+                        <CommandInput placeholder="Search cities..." />
+                        <CommandEmpty>No city found.</CommandEmpty>
+                        <CommandGroup>
+                          {cities.map((city) => (
+                            <CommandItem
+                              key={city.name}
+                              onSelect={() => {
+                                setSelectedCity(city);
+                                setIncome(city.medianIncome.toString());
+                                setOpen(false);
+                              }}
+                            >
+                              <MapPin className="mr-2 h-4 w-4" />
+                              {city.name}
+                            </CommandItem>
+                          ))}
+                        </CommandGroup>
                       </Command>
                     </PopoverContent>
                   </Popover>
+                </div>
+
+                {/* Income Input */}
+                <div className="space-y-2">
+                  <Label className="text-sm font-medium text-foreground/90">Household Income</Label>
+                  <div className="relative">
+                    <DollarSign className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                    <Input
+                      type="number"
+                      placeholder="e.g., 75000"
+                      value={income}
+                      onChange={(e) => setIncome(e.target.value)}
+                      className="pl-9 bg-background/50 border-border/40 hover:border-primary/30 focus:border-primary/50 transition-colors"
+                    />
+                  </div>
                 </div>
 
                 {/* Bathrooms Input */}
@@ -237,7 +246,7 @@ export function PricePredictor() {
                 </div>
 
                 {/* Living Space Input */}
-                <div className="space-y-2 md:col-span-2">
+                <div className="space-y-2">
                   <Label className="text-sm font-medium text-foreground/90">Living Space (sq ft)</Label>
                   <div className="relative">
                     <Home className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
@@ -275,7 +284,7 @@ export function PricePredictor() {
             </form>
 
             {/* Results Card */}
-            {result && selectedLocation && bathrooms && space && (
+            {predictedPrice !== null && (
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -285,37 +294,15 @@ export function PricePredictor() {
                 <Card className="bg-background/50 backdrop-blur-sm border-border/40">
                   <CardHeader>
                     <CardTitle>Estimated Price</CardTitle>
-                    <CardDescription>Based on AI analysis with {result.confidence}% confidence</CardDescription>
+                    <CardDescription>Based on market analysis and local data</CardDescription>
                   </CardHeader>
-                  <CardContent className="space-y-6">
-                    <div>
-                      <div className="text-4xl font-bold text-primary">
-                        ${result.price.toLocaleString()}
-                      </div>
-                      <p className="text-sm text-muted-foreground mt-2">
-                        This estimate is based on current market conditions and similar properties in {selectedLocation.label}
-                      </p>
+                  <CardContent>
+                    <div className="text-4xl font-bold text-primary">
+                      ${predictedPrice.toLocaleString()}
                     </div>
-
-                    <div className="space-y-3">
-                      <h4 className="font-medium">Price Factors</h4>
-                      <div className="space-y-2">
-                        {result.features.map((feature) => (
-                          <div key={feature.name} className="flex items-center justify-between">
-                            <span className="text-sm text-muted-foreground">{feature.name}</span>
-                            <div className="flex items-center gap-2">
-                              <div className="w-32 h-2 bg-muted rounded-full overflow-hidden">
-                                <div 
-                                  className="h-full bg-primary rounded-full"
-                                  style={{ width: `${feature.impact}%` }}
-                                />
-                              </div>
-                              <span className="text-sm font-medium w-8">{feature.impact}%</span>
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
+                    <p className="text-sm text-muted-foreground mt-2">
+                      This estimate is based on current market conditions and similar properties in {selectedCity?.name}
+                    </p>
                   </CardContent>
                 </Card>
               </motion.div>

@@ -107,7 +107,7 @@ export function Benefits() {
             >
               <motion.div 
                 className="relative group h-full"
-                whileHover={{ translateY: -3 }}
+                whileHover={{ translateY: -3, scale: 1.02 }}
                 transition={{ duration: 0.2, ease: "easeOut" }}
               >
                 <div className="absolute -inset-0.5 bg-gradient-to-b from-primary/10 to-transparent rounded-2xl blur opacity-0 group-hover:opacity-100 transition duration-300" />
