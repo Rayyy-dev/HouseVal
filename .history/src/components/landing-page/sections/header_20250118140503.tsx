@@ -1,26 +1,17 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { ChevronRight } from "lucide-react";
 
 export function Header() {
-  const scrollToPredictor = () => {
-    const element = document.getElementById('price-predictor');
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
-    }
-  };
-
   return (
     <nav className="fixed top-0 left-0 right-0 bg-background/80 backdrop-blur-md border-b border-border/40 z-50">
       <div className="container mx-auto px-4 py-4">
-        <div className="flex items-center justify-between">
+        <div className="flex items-center">
           <motion.div 
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.7 }}
             className="flex items-center gap-2.5 group cursor-pointer"
-            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
           >
             {/* House Logo */}
             <div className="relative">
@@ -107,19 +98,6 @@ export function Header() {
               </motion.div>
             </div>
           </motion.div>
-
-          {/* Get Estimate Button */}
-          <motion.button 
-            onClick={scrollToPredictor}
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.2 }}
-            className="flex items-center gap-1.5 px-4 py-2 rounded-full bg-primary/10 hover:bg-primary/15 text-primary border border-primary/20 transition-all group"
-            whileHover={{ scale: 1.02 }}
-          >
-            <span className="text-sm font-medium">Get Estimate</span>
-            <ChevronRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
-          </motion.button>
         </div>
       </div>
     </nav>

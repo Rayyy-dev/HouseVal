@@ -134,7 +134,7 @@ export function PricePredictor() {
   };
 
   return (
-    <section id="price-predictor" className="relative py-24 overflow-hidden bg-muted/30">
+    <section className="relative py-24 overflow-hidden bg-muted/30">
       {/* Background Effects */}
       <div className="absolute inset-0">
         <div className="absolute inset-0 bg-[linear-gradient(to_right,#4f4f4f12_1px,transparent_1px),linear-gradient(to_bottom,#4f4f4f12_1px,transparent_1px)] bg-[size:14px_24px]" />

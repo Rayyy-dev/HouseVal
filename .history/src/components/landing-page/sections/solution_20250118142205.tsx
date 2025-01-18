@@ -55,33 +55,25 @@ export function Solution() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.7, ease: "easeOut" }}
-          variants={containerVariants}
           className="text-center mb-20"
         >
           <motion.div
             initial={{ scale: 0.95, opacity: 0 }}
             whileInView={{ scale: 1, opacity: 1 }}
             transition={{ duration: 0.5, delay: 0.2 }}
-            variants={itemVariants}
             className="inline-block mb-6"
           >
             <span className="px-5 py-2 rounded-full bg-primary/8 text-primary text-sm font-medium border border-primary/10">
               Why Choose Us
             </span>
           </motion.div>
-          <motion.h2 
-            variants={itemVariants}
-            className="text-4xl md:text-5xl font-bold mb-6 tracking-tight"
-          >
+          <h2 className="text-4xl md:text-5xl font-bold mb-6 tracking-tight">
             <span className="bg-gradient-to-r from-primary/90 via-primary to-primary/90 bg-clip-text text-transparent">Transforming</span>
             <span className="text-foreground"> Real Estate Valuation</span>
-          </motion.h2>
-          <motion.p 
-            variants={itemVariants}
-            className="text-lg text-muted-foreground/90 max-w-2xl mx-auto leading-relaxed"
-          >
+          </h2>
+          <p className="text-lg text-muted-foreground/90 max-w-2xl mx-auto leading-relaxed">
             Experience the future of property valuation with our cutting-edge AI technology
-          </motion.p>
+          </p>
         </motion.div>
         
         {/* Enhanced Cards Grid */}
@@ -114,14 +106,14 @@ export function Solution() {
                       initial={{ opacity: 0, x: -10 }}
                       whileInView={{ opacity: 1, x: 0 }}
                       viewport={{ once: true }}
-                      transition={{ duration: 0.5, delay: i * 0.1, ease: [0.6, -0.05, 0.01, 0.99] }}
+                      transition={{ duration: 0.5, delay: i * 0.1 }}
                       key={i} 
                       className="flex items-start gap-4 group"
                     >
-                      <div className="h-6 w-6 rounded-full bg-destructive/10 flex items-center justify-center shrink-0 group-hover:bg-destructive/20 transition-all duration-500">
+                      <div className="h-6 w-6 rounded-full bg-destructive/10 flex items-center justify-center shrink-0 group-hover:bg-destructive/20 transition-colors">
                         <XCircle className="h-4 w-4 text-destructive" />
                       </div>
-                      <p className="text-muted-foreground group-hover:text-foreground transition-all duration-500">{item}</p>
+                      <p className="text-muted-foreground group-hover:text-foreground transition-colors">{item}</p>
                     </motion.div>
                   ))}
                 </CardContent>
@@ -157,14 +149,14 @@ export function Solution() {
                       initial={{ opacity: 0, x: 10 }}
                       whileInView={{ opacity: 1, x: 0 }}
                       viewport={{ once: true }}
-                      transition={{ duration: 0.5, delay: i * 0.1, ease: [0.6, -0.05, 0.01, 0.99] }}
+                      transition={{ duration: 0.5, delay: i * 0.1 }}
                       key={i} 
                       className="flex items-start gap-4 group"
                     >
-                      <div className="h-6 w-6 rounded-full bg-primary/10 flex items-center justify-center shrink-0 group-hover:bg-primary/20 transition-all duration-500">
+                      <div className="h-6 w-6 rounded-full bg-primary/10 flex items-center justify-center shrink-0 group-hover:bg-primary/20 transition-colors">
                         <CheckCircle className="h-4 w-4 text-primary" />
                       </div>
-                      <p className="text-muted-foreground group-hover:text-foreground transition-all duration-500">{item}</p>
+                      <p className="text-muted-foreground group-hover:text-foreground transition-colors">{item}</p>
                     </motion.div>
                   ))}
                 </CardContent>

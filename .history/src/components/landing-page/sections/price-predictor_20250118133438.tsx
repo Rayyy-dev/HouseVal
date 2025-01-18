@@ -133,8 +133,14 @@ export function PricePredictor() {
     }
   };
 
+  // Calculate distance to city center based on location
+  const calculateDistanceToCenter = (location: typeof locations[number]) => {
+    // This is a simplified calculation - in real app would use actual coordinates
+    return Math.round(5 + (Math.random() * 10)); // Random distance between 5-15 miles
+  };
+
   return (
-    <section id="price-predictor" className="relative py-24 overflow-hidden bg-muted/30">
+    <section className="relative py-24 overflow-hidden bg-muted/30">
       {/* Background Effects */}
       <div className="absolute inset-0">
         <div className="absolute inset-0 bg-[linear-gradient(to_right,#4f4f4f12_1px,transparent_1px),linear-gradient(to_bottom,#4f4f4f12_1px,transparent_1px)] bg-[size:14px_24px]" />

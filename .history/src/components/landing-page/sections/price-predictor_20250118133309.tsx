@@ -81,60 +81,41 @@ export function PricePredictor() {
     setIsLoading(true);
     
     try {
-      // Calculate base price using location factor and square footage
-      const basePrice = parseFloat(space) * 200; // Base price per sq ft
-      
-      // Apply location factor
-      const locationAdjustedPrice = basePrice * selectedLocation!.factor;
-      
-      // Adjust for bathrooms (each bathroom adds 15% to value)
-      const bathroomAdjustment = 1 + (parseFloat(bathrooms) * 0.15);
-      const adjustedPrice = locationAdjustedPrice * bathroomAdjustment;
-      
-      // Add market variation (+/- 10%)
-      const marketVariation = 0.9 + (Math.random() * 0.2);
-      const finalPrice = Math.round(adjustedPrice * marketVariation);
-
-      // Calculate confidence based on data quality
-      const confidence = Math.round(85 + (Math.random() * 10)); // 85-95%
-
-      // Generate feature impacts
-      const features = [
-        {
-          name: "Location",
-          impact: Math.round(40 + (Math.random() * 5)),
+      const response = await fetch('/api/predict-price', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
         },
-        {
-          name: "Living Space",
-          impact: Math.round(30 + (Math.random() * 5)),
-        },
-        {
-          name: "Bathrooms",
-          impact: Math.round(15 + (Math.random() * 5)),
-        },
-        {
-          name: "Market Trends",
-          impact: Math.round(10 + (Math.random() * 5)),
-        },
-      ];
-
-      // Set the result
-      setResult({
-        price: finalPrice,
-        confidence,
-        features,
+        body: JSON.stringify({
+          bathrooms: parseFloat(bathrooms),
+          distance: selectedLocation ? calculateDistanceToCenter(selectedLocation) : 0,
+          space: parseFloat(space),
+        }),
       });
 
+      if (!response.ok) {
+        throw new Error('Failed to get prediction');
+      }
+
+      const data = await response.json();
+      setResult(data);
       toast.success("Price estimate calculated successfully!");
     } catch (error) {
-      toast.error("Failed to calculate price estimate. Please try again.");
+      console.error('Error predicting price:', error);
+      toast.error("Failed to calculate price estimate");
     } finally {
       setIsLoading(false);
     }
   };
 
+  // Calculate distance to city center based on location
+  const calculateDistanceToCenter = (location: typeof locations[number]) => {
+    // This is a simplified calculation - in real app would use actual coordinates
+    return Math.round(5 + (Math.random() * 10)); // Random distance between 5-15 miles
+  };
+
   return (
-    <section id="price-predictor" className="relative py-24 overflow-hidden bg-muted/30">
+    <section className="relative py-24 overflow-hidden bg-muted/30">
       {/* Background Effects */}
       <div className="absolute inset-0">
         <div className="absolute inset-0 bg-[linear-gradient(to_right,#4f4f4f12_1px,transparent_1px),linear-gradient(to_bottom,#4f4f4f12_1px,transparent_1px)] bg-[size:14px_24px]" />

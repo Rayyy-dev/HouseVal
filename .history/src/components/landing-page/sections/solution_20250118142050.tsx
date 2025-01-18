@@ -5,7 +5,6 @@ import { Card, CardContent } from "@/components/ui/card";
 import { CheckCircle, XCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-// Add smooth animation variants
 const containerVariants = {
   hidden: { opacity: 0 },
   visible: {
@@ -40,7 +39,7 @@ export function Solution() {
         <motion.div 
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ duration: 1.5 }}
+          transition={{ duration: 1, ease: "easeOut" }}
           className="absolute inset-0"
         >
           <div className="absolute left-0 right-0 top-0 -z-10 m-auto h-[310px] w-[310px] rounded-full bg-primary/5 blur-[120px] animate-pulse-slow" />
@@ -51,17 +50,13 @@ export function Solution() {
       <div className="container mx-auto px-4 relative">
         {/* Enhanced Header */}
         <motion.div 
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.7, ease: "easeOut" }}
           variants={containerVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
           className="text-center mb-20"
         >
           <motion.div
-            initial={{ scale: 0.95, opacity: 0 }}
-            whileInView={{ scale: 1, opacity: 1 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
             variants={itemVariants}
             className="inline-block mb-6"
           >
@@ -90,17 +85,25 @@ export function Solution() {
             initial={{ opacity: 0, x: -20 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.7 }}
+            transition={{ duration: 0.6, ease: [0.6, -0.05, 0.01, 0.99] }}
           >
             <Card className="relative group h-full">
-              <div className="absolute -inset-0.5 bg-gradient-to-br from-destructive/20 to-destructive/0 rounded-2xl blur opacity-50 group-hover:opacity-75 transition duration-300" />
+              <motion.div 
+                initial={{ opacity: 0 }}
+                whileInView={{ opacity: 0.5 }}
+                transition={{ duration: 0.6 }}
+                className="absolute -inset-0.5 bg-gradient-to-br from-destructive/20 to-destructive/0 rounded-2xl blur group-hover:opacity-75 transition duration-500"
+              />
               <div className="relative h-full bg-background/50 backdrop-blur-sm rounded-xl p-8 border border-destructive/20">
-                <h3 className="text-2xl font-bold mb-8 flex items-center gap-3">
+                <motion.h3 
+                  variants={itemVariants}
+                  className="text-2xl font-bold mb-8 flex items-center gap-3"
+                >
                   <div className="p-2 rounded-lg bg-destructive/10">
                     <XCircle className="text-destructive h-6 w-6" />
                   </div>
                   Traditional Methods
-                </h3>
+                </motion.h3>
                 <CardContent className="space-y-6 p-0">
                   {[
                     "Time-consuming manual assessments",
@@ -111,17 +114,18 @@ export function Solution() {
                     "High margin of error"
                   ].map((item, i) => (
                     <motion.div
-                      initial={{ opacity: 0, x: -10 }}
-                      whileInView={{ opacity: 1, x: 0 }}
+                      key={i}
+                      variants={itemVariants}
+                      initial="hidden"
+                      whileInView="visible"
                       viewport={{ once: true }}
-                      transition={{ duration: 0.5, delay: i * 0.1, ease: [0.6, -0.05, 0.01, 0.99] }}
-                      key={i} 
+                      transition={{ delay: i * 0.1 }}
                       className="flex items-start gap-4 group"
                     >
-                      <div className="h-6 w-6 rounded-full bg-destructive/10 flex items-center justify-center shrink-0 group-hover:bg-destructive/20 transition-all duration-500">
+                      <div className="h-6 w-6 rounded-full bg-destructive/10 flex items-center justify-center shrink-0 group-hover:bg-destructive/20 transition-colors duration-300">
                         <XCircle className="h-4 w-4 text-destructive" />
                       </div>
-                      <p className="text-muted-foreground group-hover:text-foreground transition-all duration-500">{item}</p>
+                      <p className="text-muted-foreground group-hover:text-foreground transition-colors duration-300">{item}</p>
                     </motion.div>
                   ))}
                 </CardContent>
@@ -133,17 +137,25 @@ export function Solution() {
             initial={{ opacity: 0, x: 20 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.7 }}
+            transition={{ duration: 0.6, ease: [0.6, -0.05, 0.01, 0.99] }}
           >
             <Card className="relative group h-full">
-              <div className="absolute -inset-0.5 bg-gradient-to-br from-primary/20 to-primary/0 rounded-2xl blur opacity-50 group-hover:opacity-75 transition duration-300" />
+              <motion.div 
+                initial={{ opacity: 0 }}
+                whileInView={{ opacity: 0.5 }}
+                transition={{ duration: 0.6 }}
+                className="absolute -inset-0.5 bg-gradient-to-br from-primary/20 to-primary/0 rounded-2xl blur group-hover:opacity-75 transition duration-500"
+              />
               <div className="relative h-full bg-background/50 backdrop-blur-sm rounded-xl p-8 border border-primary/20">
-                <h3 className="text-2xl font-bold mb-8 flex items-center gap-3">
+                <motion.h3 
+                  variants={itemVariants}
+                  className="text-2xl font-bold mb-8 flex items-center gap-3"
+                >
                   <div className="p-2 rounded-lg bg-primary/10">
                     <CheckCircle className="text-primary h-6 w-6" />
                   </div>
                   HouseVal Solution
-                </h3>
+                </motion.h3>
                 <CardContent className="space-y-6 p-0">
                   {[
                     "AI-powered instant valuations",
@@ -154,17 +166,18 @@ export function Solution() {
                     "99% confidence rate"
                   ].map((item, i) => (
                     <motion.div
-                      initial={{ opacity: 0, x: 10 }}
-                      whileInView={{ opacity: 1, x: 0 }}
+                      key={i}
+                      variants={itemVariants}
+                      initial="hidden"
+                      whileInView="visible"
                       viewport={{ once: true }}
-                      transition={{ duration: 0.5, delay: i * 0.1, ease: [0.6, -0.05, 0.01, 0.99] }}
-                      key={i} 
+                      transition={{ delay: i * 0.1 }}
                       className="flex items-start gap-4 group"
                     >
-                      <div className="h-6 w-6 rounded-full bg-primary/10 flex items-center justify-center shrink-0 group-hover:bg-primary/20 transition-all duration-500">
+                      <div className="h-6 w-6 rounded-full bg-primary/10 flex items-center justify-center shrink-0 group-hover:bg-primary/20 transition-colors duration-300">
                         <CheckCircle className="h-4 w-4 text-primary" />
                       </div>
-                      <p className="text-muted-foreground group-hover:text-foreground transition-all duration-500">{item}</p>
+                      <p className="text-muted-foreground group-hover:text-foreground transition-colors duration-300">{item}</p>
                     </motion.div>
                   ))}
                 </CardContent>

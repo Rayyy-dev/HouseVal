@@ -96,14 +96,14 @@ export function Hero() {
             <h1 className="text-5xl sm:text-6xl font-bold leading-[1.1] tracking-tight">
               <span className="inline-block">
                 <span className="relative inline-flex items-center">
-                  <span className="relative z-10 text-foreground">
+                  <span className="relative z-10 bg-gradient-to-r from-foreground via-foreground/90 to-foreground bg-clip-text text-transparent">
                     Predict House Prices
                   </span>
-                  <div className="absolute inset-x-0 -bottom-2 h-3 bg-primary/10 blur-xl" />
+                  <div className="absolute inset-x-0 -bottom-2 h-3 bg-[#22c55e]/10 blur-xl" />
                 </span>
               </span>
               <br />
-              <span className="text-4xl sm:text-5xl text-primary mt-6 block font-extrabold">
+              <span className="text-4xl sm:text-5xl bg-gradient-to-r from-[#22c55e] via-[#22c55e]/90 to-[#22c55e] bg-clip-text text-transparent mt-6 block">
                 with AI Precision
               </span>
             </h1>
@@ -120,17 +120,17 @@ export function Hero() {
                 value={address}
                 onChange={(e) => setAddress(e.target.value)}
                 placeholder="Enter property address"
-                className="pl-12 h-14 text-base rounded-xl border-border/50 bg-background/50 hover:bg-background/80 focus:border-primary/30 focus:ring-primary/20 transition-all duration-300"
+                className="pl-12 h-14 text-base rounded-xl border-border/50 bg-background/50 hover:bg-background/80 focus:border-[#22c55e]/30 focus:ring-[#22c55e]/20 transition-all duration-300"
               />
               {isAnalyzing && (
                 <div className="absolute right-4 top-4">
-                  <div className="h-5 w-5 rounded-full border-2 border-primary border-r-transparent animate-spin" />
+                  <div className="h-5 w-5 rounded-full border-2 border-[#22c55e] border-r-transparent animate-spin" />
                 </div>
               )}
             </div>
             <Button 
               size="lg" 
-              className="h-14 px-8 rounded-xl bg-primary hover:bg-primary/90 transition-all duration-300 shadow-lg hover:shadow-primary/25 group"
+              className="h-14 px-8 rounded-xl bg-[#22c55e] hover:bg-[#22c55e]/90 transition-all duration-300 shadow-lg hover:shadow-[#22c55e]/25 group"
               onClick={handleGetEstimate}
               disabled={isAnalyzing || !address}
             >
@@ -144,8 +144,8 @@ export function Hero() {
             <div className="h-12 w-px bg-border/50" />
             <div className="flex items-center gap-3">
               <div className="relative">
-                <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center">
-                  <span className="text-primary font-bold text-lg">4.9</span>
+                <div className="w-12 h-12 rounded-xl bg-[#22c55e]/10 flex items-center justify-center">
+                  <span className="text-[#22c55e] font-bold text-lg">4.9</span>
                 </div>
               </div>
               <div className="space-y-1">

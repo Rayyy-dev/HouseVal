@@ -92,7 +92,7 @@ export function Hero() {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
         {/* Left content */}
         <div className="space-y-8">
-          <div className="space-y-6">
+          <div className="space-y-4">
             <h1 className="text-5xl sm:text-6xl font-bold leading-[1.1] tracking-tight">
               <span className="inline-block">
                 <span className="relative inline-flex items-center">
@@ -103,11 +103,11 @@ export function Hero() {
                 </span>
               </span>
               <br />
-              <span className="text-4xl sm:text-5xl text-primary mt-6 block font-extrabold">
+              <span className="text-4xl sm:text-5xl bg-gradient-to-r from-primary via-primary to-primary/90 bg-clip-text text-transparent mt-4 block">
                 with AI Precision
               </span>
             </h1>
-            <p className="text-lg text-muted-foreground/90 leading-relaxed max-w-2xl">
+            <p className="text-xl text-muted-foreground/90 leading-relaxed max-w-2xl">
               Transform your real estate decisions with our advanced AI valuation model.
               Get instant, accurate property estimates powered by machine learning.
             </p>
@@ -120,7 +120,7 @@ export function Hero() {
                 value={address}
                 onChange={(e) => setAddress(e.target.value)}
                 placeholder="Enter property address"
-                className="pl-12 h-14 text-base rounded-xl border-border/50 bg-background/50 hover:bg-background/80 focus:border-primary/30 focus:ring-primary/20 transition-all duration-300"
+                className="pl-12 h-14 text-base rounded-xl border-border/50 bg-muted/50 hover:bg-muted/80 transition-colors"
               />
               {isAnalyzing && (
                 <div className="absolute right-4 top-4">
@@ -134,7 +134,7 @@ export function Hero() {
               onClick={handleGetEstimate}
               disabled={isAnalyzing || !address}
             >
-              <span className="font-medium">Get Estimate</span>
+              Get Estimate
               <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
             </Button>
           </div>
